@@ -46,7 +46,7 @@ class Navbar extends Component {
         <Link to="/" className="navbar-brand">
           Jit modeling
         </Link>
-        {isAuthenticated ? authLinks : guestLinks}
+
         <button
           className="navbar-toggler"
           data-toggle="collapse"
@@ -54,7 +54,9 @@ class Navbar extends Component {
         >
           <span className="navbar-toggler-icon" />
         </button>
-        <div className="collapse navbar-collapse" id="toggable" />
+        <div className="collapse navbar-collapse" id="toggable">
+          {isAuthenticated ? authLinks : guestLinks}
+        </div>
       </nav>
     );
   }

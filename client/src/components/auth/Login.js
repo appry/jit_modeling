@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authActions";
-import classnames from "classnames";
+import TextFieldGroup from "../common/TextFieldGroup";
 
 class Login extends Component {
   constructor() {
@@ -21,6 +21,7 @@ class Login extends Component {
       this.props.history.push("/");
     }
   }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/modeling");
@@ -51,24 +52,25 @@ class Login extends Component {
     return (
       <div className="container">
         <div className="row mt-5">
-          <div className="col-md-8 m-auto ">
+          <div className="col-md-6 col-sm-10 m-auto ">
             <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  className={classnames("form-control", {
-                    "is-invalid": errors.email
-                  })}
-                  type="email"
-                  name="email"
-                  value={this.state.email}
-                  onChange={this.onChange}
-                />
-                {errors.email && (
-                  <div className="invalid-feedback">{errors.email}</div>
-                )}
-              </div>
-              <div className="form-group">
+              <TextFieldGroup
+                name="email"
+                type="email"
+                value={this.state.email}
+                label="Email"
+                onChange={this.onChange}
+                error={errors.email}
+              />
+              <TextFieldGroup
+                name="password"
+                type="password"
+                value={this.state.password}
+                label="Password"
+                onChange={this.onChange}
+                error={errors.password}
+              />
+              {/* <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <input
                   type="password"
@@ -82,7 +84,7 @@ class Login extends Component {
                 {errors.password && (
                   <div className="invalid-feedback">{errors.password}</div>
                 )}
-              </div>
+              </div> */}
 
               <button type="submit" className="btn btn-primary">
                 Submit
