@@ -54,11 +54,9 @@ router.put(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    console.log("update");
     let projectFields = {};
     projectFields.name = req.body.name;
     projectFields.jsonData = req.body.jsonData;
-    console.log(req.body.name);
     projectFields.user = req.user.id;
     Project.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },

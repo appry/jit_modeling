@@ -70,21 +70,6 @@ class Login extends Component {
                 onChange={this.onChange}
                 error={errors.password}
               />
-              {/* <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  className={classnames("form-control", {
-                    "is-invalid": errors.password
-                  })}
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                />
-                {errors.password && (
-                  <div className="invalid-feedback">{errors.password}</div>
-                )}
-              </div> */}
 
               <button type="submit" className="btn btn-primary">
                 Submit

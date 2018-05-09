@@ -6,6 +6,7 @@ import { setCurrentUser } from "./actions/authActions";
 import { logoutUser } from "./actions/authActions";
 import { Provider } from "react-redux";
 import store from "./store";
+import "./style/App.css";
 
 import PrivateRoute from "./components/common/PrivateRoute";
 
