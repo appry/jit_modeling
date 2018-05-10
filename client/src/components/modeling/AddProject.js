@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { createProject } from "../../actions/projectsActions";
 
-class ManageProjects extends Component {
+class AddProject extends Component {
   constructor() {
     super();
     this.state = {
@@ -43,4 +43,4 @@ class ManageProjects extends Component {
   }
 }
 
-export default connect(null, { createProject })(ManageProjects);
+export default connect(null, { createProject })(AddProject);

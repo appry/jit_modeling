@@ -15,7 +15,11 @@ router.get(
   (req, res) => {
     Project.find({ user: req.user.id })
       .then(projects => {
-        res.json(projects);
+        let obj = {};
+        for (let project of projects) {
+          obj[project._id] = project;
+        }
+        res.json(obj);
       })
       .catch(err => {
         res.status(500).json({ servererror: "Unkonwn server error" });

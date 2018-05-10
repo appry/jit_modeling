@@ -18,7 +18,7 @@ class ProjectsList extends Component {
   render() {
     console.log("ProjectsList rendered");
     if (this.props.loading) return <Spinner />;
-    const listItems = this.props.projects.map(p => (
+    const listItems = Object.values(this.props.projects).map(p => (
       <li key={p._id} className="list-group-item">
         <button
           id={p._id}
@@ -32,15 +32,20 @@ class ProjectsList extends Component {
         >
           <span
             className={classnames("icon-sync", {
-              "fas fa-check-circle": p.isSynced,
-              "fas fa-exclamation-circle": !p.isSynced
+              "fas fa-check-circle": p.isSynced === "s",
+              "fas fa-exclamation-circle": p.isSynced === "n",
+              "fas fa-spinner fa-spin": p.isSynced === "l"
             })}
           />
           {p.name}
         </button>
       </li>
     ));
-    return <ul className="list-group">{listItems}</ul>;
+    return (
+      <div>
+        <ul className="list-group">{listItems}</ul>
+      </div>
+    );
   }
 }
 
@@ -49,7 +54,7 @@ const mapStateToProps = function(state) {
     selectedProjectId: state.projects.selectedProjectId,
     loading: state.projects.loading
   };
-  props.projects = state.projects.projects.map(project => ({
+  props.projects = Object.map(state.projects.projects, project => ({
     _id: project._id,
     name: project.name,
     isSynced: project.isSynced

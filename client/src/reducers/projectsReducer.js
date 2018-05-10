@@ -2,48 +2,101 @@ import {
   GET_PROJECTS,
   PROJECTS_LOADING,
   CREATE_PROJECT,
-  SELECT_PROJECT
+  SELECT_PROJECT,
+  RENAME_PROJECT,
+  DELETE_PROJECT,
+  SYNC,
+  SYNC_ALL,
+  PROJECT_SYNCING
 } from "../actions/types";
 
 import isEmpty from "../validation/is-empty";
 
 const initialState = {
-  projects: [],
+  projects: {},
   selectedProjectId: null
 };
 
 export default function(state = initialState, action) {
-  console.log(action.type);
   switch (action.type) {
     case PROJECTS_LOADING:
-      console.log("PROJECTS_LOADING");
       return {
         ...state,
         loading: true
       };
+    case PROJECT_SYNCING: {
+      let project = action.payload;
+      project.isSynced = "l";
+      return {
+        ...state,
+        projects: { ...state.projects, [project._id]: project }
+      };
+    }
     case GET_PROJECTS:
-      console.log(action.payload);
-      if (isEmpty(action.payload)) return state;
+      if (isEmpty(action.payload))
+        return {
+          ...state,
+          loading: false
+        };
+      let projects = Object.map(action.payload, project => ({
+        ...project,
+        isSynced: "s"
+      }));
       return {
         ...state,
         loading: false,
-        projects: action.payload.map(p => ({ ...p, isSynced: true })),
-        selectedProjectId: action.payload[0]._id
+        projects,
+        selectedProjectId: action.payload[Object.keys(action.payload)[0]]._id
       };
     case CREATE_PROJECT:
-      console.log("CREATE_PROJECT");
       const project = action.payload;
-      project.isSynced = true;
+      project.isSynced = "s";
       return {
         ...state,
-        projects: [...state.projects, project]
+        projects: { ...state.projects, [project._id]: project }
       };
     case SELECT_PROJECT:
-      console.log("SELECT_PROJECT");
       return {
         ...state,
         selectedProjectId: action.payload
       };
+    case RENAME_PROJECT:
+      const { _id, name } = action.payload;
+      const selectedProject = Object.assign({}, state.projects[_id]);
+      selectedProject.name = name;
+      selectedProject.isSynced = "n";
+      return {
+        ...state,
+        projects: { ...state.projects, [_id]: selectedProject }
+      };
+    case DELETE_PROJECT: {
+      let projects = Object.assign({}, state.projects);
+      delete projects[action.payload];
+      if (state.selectedProjectId === action.payload)
+        state.selectedProjectId = null;
+      return {
+        ...state,
+        projects
+      };
+    }
+    case SYNC: {
+      const project = action.payload;
+      project.isSynced = "s";
+      return {
+        ...state,
+        projects: { ...state.projects, [project._id]: project }
+      };
+    }
+    case SYNC_ALL: {
+      const projects = Object.map(action.payload, project => {
+        project.isSynced = "s";
+        return project;
+      });
+      return {
+        ...state,
+        projects
+      };
+    }
     default:
       return state;
   }

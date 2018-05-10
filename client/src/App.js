@@ -15,6 +15,15 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import ModelingPage from "./components/modeling/ModelingPage";
 
+Object.filter = (obj, predicate) =>
+  Object.assign(
+    ...Object.keys(obj)
+      .filter(key => predicate(obj[key]))
+      .map(key => ({ [key]: obj[key] }))
+  );
+
+Object.map = (obj, callback) =>
+  Object.assign({}, ...Object.keys(obj).map(k => ({ [k]: callback(obj[k]) })));
 // Check for token
 if (localStorage.jwtToken) {
   // Set auth token header auth
