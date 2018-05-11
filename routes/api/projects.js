@@ -6,6 +6,29 @@ const passport = require("passport");
 const User = require("../../models/User");
 const Project = require("../../models/Project");
 
+//@route    GET api/projects/info
+//@desc     Get all projects info
+//access    Private
+router.get(
+  "/info",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Project.find({ user: req.user.id })
+      .then(projects => {
+        let obj = {};
+        for (let project of projects) {
+          project = project.toObject();
+          delete project.jsonData;
+          obj[project._id] = project;
+        }
+        res.json(obj);
+      })
+      .catch(err => {
+        res.status(500).json({ servererror: "Unkonwn server error" });
+      });
+  }
+);
+
 //@route    GET api/projects
 //@desc     Get all projects
 //access    Private
@@ -20,6 +43,23 @@ router.get(
           obj[project._id] = project;
         }
         res.json(obj);
+      })
+      .catch(err => {
+        res.status(500).json({ servererror: "Unkonwn server error" });
+      });
+  }
+);
+
+//@route    GET api/projects/:id
+//@desc     Get project by id
+//access    Private
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Project.findOne({ user: req.user.id, _id: req.params.id })
+      .then(project => {
+        res.json(project.jsonData);
       })
       .catch(err => {
         res.status(500).json({ servererror: "Unkonwn server error" });

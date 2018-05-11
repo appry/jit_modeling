@@ -1,20 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getProjects } from "../../actions/projectsActions";
+import { getProjectsInfo } from "../../actions/projectsActions";
 import { selectProject } from "../../actions/projectsActions";
 import Spinner from "../common/Spinner";
 import classnames from "classnames";
 
 class ProjectsList extends Component {
   componentDidMount() {
-    this.props.getProjects();
+    this.props.getProjectsInfo();
   }
 
   onClick(e) {
-    const id = e.target.id === "" ? e.target.parentElement.id : e.target.id;
-    this.props.selectProject(id);
+    const _id = e.target.id === "" ? e.target.parentElement.id : e.target.id;
+    console.log(this.props);
+    this.props.selectProject({ _id, model: this.props.projects[_id].model });
   }
-
+  componentDidUpdate() {
+    console.log(this.props);
+  }
   render() {
     console.log("ProjectsList rendered");
     if (this.props.loading) return <Spinner />;
@@ -57,11 +60,13 @@ const mapStateToProps = function(state) {
   props.projects = Object.map(state.projects.projects, project => ({
     _id: project._id,
     name: project.name,
-    isSynced: project.isSynced
+    isSynced: project.isSynced,
+    model: project.model
   }));
+  console.log(props);
   return props;
 };
 
-export default connect(mapStateToProps, { getProjects, selectProject })(
+export default connect(mapStateToProps, { getProjectsInfo, selectProject })(
   ProjectsList
 );

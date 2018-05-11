@@ -2,6 +2,8 @@ import axios from "axios";
 
 import {
   GET_PROJECTS,
+  GET_PROJECTS_INFO,
+  GET_PROJECT,
   PROJECTS_LOADING,
   CREATE_PROJECT,
   SELECT_PROJECT,
@@ -11,6 +13,44 @@ import {
   SYNC_ALL,
   PROJECT_SYNCING
 } from "./types";
+
+import isEmpty from "../validation/is-empty";
+//Get project by id
+export const getProject = _id => dispatch => {
+  axios
+    .get(`api/projects/${_id}`)
+    .then(res => {
+      dispatch({
+        type: GET_PROJECT,
+        payload: { jsonData: res.data, _id }
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_PROJECT,
+        payload: {}
+      });
+    });
+};
+
+//Get all project infos
+export const getProjectsInfo = () => dispatch => {
+  dispatch(setProjectsLoading());
+  axios
+    .get("api/projects/info")
+    .then(res => {
+      dispatch({
+        type: GET_PROJECTS_INFO,
+        payload: res.data
+      });
+    })
+    .catch(err => {
+      dispatch({
+        type: GET_PROJECTS_INFO,
+        payload: {}
+      });
+    });
+};
 
 //Get all user projects
 export const getProjects = () => dispatch => {
@@ -42,11 +82,15 @@ export const createProject = name => dispatch => {
 };
 
 //Select project
-export const selectProject = _id => {
-  return {
-    type: SELECT_PROJECT,
-    payload: _id
-  };
+export const selectProject = data => dispatch => {
+  if (data.model === undefined) {
+    console.log(data.model);
+    dispatch(getProject(data._id));
+  } else
+    dispatch({
+      type: SELECT_PROJECT,
+      payload: data._id
+    });
 };
 
 //Rename project

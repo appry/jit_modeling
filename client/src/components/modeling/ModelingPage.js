@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import AddProject from "./AddProject";
 import ProjectsList from "./ProjectsList";
 import ManagerPanel from "./ManagerPanel";
-import Tabs from "../common/Tabs";
+import Tabs from "./Tabs";
+import Controls from "./Controls";
 
 class ModelingPage extends Component {
   render() {
@@ -23,11 +24,12 @@ class ModelingPage extends Component {
                 <ProjectsList />
               </div>
             </div>
-            <div className="controls-container border">Lorem</div>
+            <div className="controls-container border">
+              <Controls />
+            </div>
           </div>
-          <div className="panel-center border">
-            <Tabs />
-          </div>
+          <Tabs />
+
           <div className="panel-right border">Hi3</div>
         </div>
       </div>

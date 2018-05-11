@@ -9,3 +9,6 @@ export const DELETE_PROJECT = "DELETE_PROJECT";
 export const SYNC_ALL = "SYNC_ALL";
 export const SYNC = "SYNC";
 export const PROJECT_SYNCING = "PROJECT_SYNCING";
+export const SET_CONTROL = "SET_CONTROL";
+export const GET_PROJECTS_INFO = "GET_PROJECTS_INFO";
+export const GET_PROJECT = "GET_PROJECT";
