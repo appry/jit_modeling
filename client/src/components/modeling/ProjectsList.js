@@ -4,6 +4,7 @@ import { getProjectsInfo } from "../../actions/projectsActions";
 import { selectProject } from "../../actions/projectsActions";
 import Spinner from "../common/Spinner";
 import classnames from "classnames";
+import projectStateEnum from "../../utils/projectStateEnum";
 
 class ProjectsList extends Component {
   componentDidMount() {
@@ -12,12 +13,12 @@ class ProjectsList extends Component {
 
   onClick(e) {
     const _id = e.target.id === "" ? e.target.parentElement.id : e.target.id;
-    console.log(this.props);
-    this.props.selectProject({ _id, model: this.props.projects[_id].model });
+    this.props.selectProject({
+      _id,
+      isSynced: this.props.projects[_id].isSynced
+    });
   }
-  componentDidUpdate() {
-    console.log(this.props);
-  }
+
   render() {
     console.log("ProjectsList rendered");
     if (this.props.loading) return <Spinner />;
@@ -35,9 +36,11 @@ class ProjectsList extends Component {
         >
           <span
             className={classnames("icon-sync", {
-              "fas fa-check-circle": p.isSynced === "s",
-              "fas fa-exclamation-circle": p.isSynced === "n",
-              "fas fa-spinner fa-spin": p.isSynced === "l"
+              "fas fa-check-circle": p.isSynced === projectStateEnum.SYNCED,
+              "fas fa-exclamation-circle":
+                p.isSynced === projectStateEnum.NOT_SYNCED,
+              "fas fa-spinner fa-spin": p.isSynced === projectStateEnum.LOADING,
+              "fas fa-download": p.isSynced === projectStateEnum.NOT_LOADED
             })}
           />
           {p.name}
@@ -60,10 +63,8 @@ const mapStateToProps = function(state) {
   props.projects = Object.map(state.projects.projects, project => ({
     _id: project._id,
     name: project.name,
-    isSynced: project.isSynced,
-    model: project.model
+    isSynced: project.isSynced
   }));
-  console.log(props);
   return props;
 };
 

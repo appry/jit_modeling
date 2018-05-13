@@ -11,8 +11,8 @@ const ProjectSchema = new Schema(
       type: String,
       requried: true
     },
-    jsonData: {
-      type: String,
+    model: {
+      type: Object,
       requried: true
     }
   },

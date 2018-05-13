@@ -18,7 +18,7 @@ router.get(
         let obj = {};
         for (let project of projects) {
           project = project.toObject();
-          delete project.jsonData;
+          delete project.model;
           obj[project._id] = project;
         }
         res.json(obj);
@@ -38,6 +38,7 @@ router.get(
   (req, res) => {
     Project.find({ user: req.user.id })
       .then(projects => {
+        console.log("TEST");
         let obj = {};
         for (let project of projects) {
           obj[project._id] = project;
@@ -59,7 +60,8 @@ router.get(
   (req, res) => {
     Project.findOne({ user: req.user.id, _id: req.params.id })
       .then(project => {
-        res.json(project.jsonData);
+        console.log(project);
+        res.json(project.model);
       })
       .catch(err => {
         res.status(500).json({ servererror: "Unkonwn server error" });
@@ -76,13 +78,15 @@ router.post(
   (req, res) => {
     const newProject = new Project({
       user: req.user.id,
-      jsonData: "",
+      model: "",
       name: req.body.name
     });
 
     newProject
       .save()
       .then(project => {
+        project = project.toObject();
+        project.model = {};
         res.json(project);
       })
       .catch(err =>
@@ -100,7 +104,7 @@ router.put(
   (req, res) => {
     let projectFields = {};
     projectFields.name = req.body.name;
-    projectFields.jsonData = req.body.jsonData;
+    projectFields.model = req.body.model;
     projectFields.user = req.user.id;
     Project.findOneAndUpdate(
       { _id: req.params.id, user: req.user.id },

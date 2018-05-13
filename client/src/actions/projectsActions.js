@@ -13,16 +13,18 @@ import {
   SYNC_ALL,
   PROJECT_SYNCING
 } from "./types";
-
+import projectStateEnum from "../utils/projectStateEnum";
 import isEmpty from "../validation/is-empty";
+
 //Get project by id
 export const getProject = _id => dispatch => {
+  dispatch(setProjectSyncing(_id));
   axios
     .get(`api/projects/${_id}`)
     .then(res => {
       dispatch({
         type: GET_PROJECT,
-        payload: { jsonData: res.data, _id }
+        payload: { model: res.data, _id }
       });
     })
     .catch(err => {
@@ -83,8 +85,7 @@ export const createProject = name => dispatch => {
 
 //Select project
 export const selectProject = data => dispatch => {
-  if (data.model === undefined) {
-    console.log(data.model);
+  if (data.isSynced === projectStateEnum.NOT_LOADED) {
     dispatch(getProject(data._id));
   } else
     dispatch({
@@ -103,6 +104,7 @@ export const renameProject = (name, _id) => {
 
 //Delete project
 export const deleteProject = _id => dispatch => {
+  if (isEmpty(_id)) return;
   axios.delete(`api/projects/${_id}`).then(res => {
     dispatch({
       type: DELETE_PROJECT,
@@ -112,7 +114,9 @@ export const deleteProject = _id => dispatch => {
 };
 
 export const sync = project => dispatch => {
-  dispatch(setProjectSyncing(project));
+  if (isEmpty(project)) return;
+  if (project.isSynced === projectStateEnum.NOT_LOADED) return;
+  dispatch(setProjectSyncing(project._id));
   axios.put(`api/projects/${project._id}`, project).then(res => {
     dispatch({
       type: SYNC,
@@ -122,10 +126,12 @@ export const sync = project => dispatch => {
 };
 
 export const syncAll = projects => dispatch => {
+  if (isEmpty(projects)) return;
   let promises = [];
   for (let key of Object.keys(projects)) {
     let project = projects[key];
-    dispatch(setProjectSyncing(project));
+    if (project.isSynced === projectStateEnum.NOT_LOADED) continue;
+    dispatch(setProjectSyncing(project._id));
     promises.push(axios.put(`api/projects/${project._id}`, project));
   }
   axios.all(promises).then(results => {
@@ -144,9 +150,9 @@ export const setProjectsLoading = () => {
 };
 
 //Project syncing
-export const setProjectSyncing = project => {
+export const setProjectSyncing = _id => {
   return {
     type: PROJECT_SYNCING,
-    payload: project
+    payload: _id
   };
 };

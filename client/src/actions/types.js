@@ -12,3 +12,12 @@ export const PROJECT_SYNCING = "PROJECT_SYNCING";
 export const SET_CONTROL = "SET_CONTROL";
 export const GET_PROJECTS_INFO = "GET_PROJECTS_INFO";
 export const GET_PROJECT = "GET_PROJECT";
+
+export const CREATE_NODE = "CREATE_NODE";
+export const DELETE_NODE = "DELETE_NODE";
+export const RENAME_NODE = "RENAME_NODE";
+export const MOVE_NODE = "MOVE_NODE";
+
+export const CREATE_EDGE = "CREATE_EDGE";
+export const DELETE_EDGE = "DELETE_EDGE";
+export const RENAME_EDGE = "RENAME_EDGE";

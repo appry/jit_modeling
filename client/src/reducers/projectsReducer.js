@@ -1,5 +1,4 @@
 import {
-  GET_PROJECTS,
   PROJECTS_LOADING,
   CREATE_PROJECT,
   SELECT_PROJECT,
@@ -13,13 +12,28 @@ import {
 } from "../actions/types";
 
 import isEmpty from "../validation/is-empty";
-
+import projectStateEnum from "../utils/projectStateEnum";
+import modelReducer from "./modelReducer";
+import { Model } from "../modelClasses";
 const initialState = {
   projects: {},
   selectedProjectId: null
 };
 
 export default function(state = initialState, action) {
+  if (action.modelChanged) {
+    const _id = state.selectedProjectId;
+    const project = state.projects[_id];
+    const model = project.model;
+    if (model === undefined) return;
+    return {
+      ...state,
+      projects: {
+        ...state.projects,
+        [_id]: { ...project, model: modelReducer(model, action) }
+      }
+    };
+  }
   switch (action.type) {
     case PROJECTS_LOADING:
       return {
@@ -27,8 +41,8 @@ export default function(state = initialState, action) {
         loading: true
       };
     case PROJECT_SYNCING: {
-      let project = action.payload;
-      project.isSynced = "l";
+      let project = state.projects[action.payload];
+      project.isSynced = projectStateEnum.LOADING;
       return {
         ...state,
         projects: { ...state.projects, [project._id]: project }
@@ -36,52 +50,44 @@ export default function(state = initialState, action) {
     }
     case GET_PROJECT: {
       let project = { ...state.projects[action.payload._id] };
-      project.isSynced = "s";
-
-      delete project.jsonData;
-      if (isEmpty(action.payload.jsonData)) {
-        project.model = {};
-        return {
-          ...state,
-          projects: { ...state.projects, [project._id]: project },
-          selectedProjectId: project._id,
-          loading: false
-        };
+      project.isSynced = projectStateEnum.SYNCED;
+      if (isEmpty(action.payload.model)) {
+        project.model = new Model();
+      } else {
+        project.model = action.payload.model;
       }
-
-      project.model = JSON.parse(action.payload.jsonData);
       return {
         ...state,
         projects: { ...state.projects, [project._id]: project },
+        selectedProjectId: project._id,
         loading: false
       };
     }
-    case GET_PROJECTS:
-      if (isEmpty(action.payload))
-        return {
-          ...state,
-          loading: false
-        };
-      let projects = Object.map(action.payload, project => {
-        let obj = { ...project };
-        if (!isEmpty(project.jsonData))
-          obj.model = JSON.parse(project.jsonData);
-        else obj.model = {};
-        delete obj.jsonData;
-        return {
-          ...obj,
-          isSynced: "s"
-        };
-      });
-      return {
-        ...state,
-        loading: false,
-        projects,
-        selectedProjectId: action.payload[Object.keys(action.payload)[0]]._id
-      };
+    // case GET_PROJECTS:
+    //   if (isEmpty(action.payload))
+    //     return {
+    //       ...state,
+    //       loading: false
+    //     };
+    //   let projects = Object.map(action.payload, project => {
+    //     let obj = { ...project };
+    //     if (!isEmpty(project.model))
+    //       obj.model = JSON.parse(project.jsonData);
+    //     else obj.model = {};
+    //     return {
+    //       ...obj,
+    //       isSynced: projectStateEnum.SYNCED
+    //     };
+    //   });
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     projects,
+    //     selectedProjectId: action.payload[Object.keys(action.payload)[0]]._id
+    //   };
     case GET_PROJECTS_INFO: {
       let projects = Object.map(action.payload, project => {
-        project.isSynced = "n";
+        project.isSynced = projectStateEnum.NOT_LOADED;
         return project;
       });
       return {
@@ -93,7 +99,9 @@ export default function(state = initialState, action) {
 
     case CREATE_PROJECT:
       const project = action.payload;
-      project.isSynced = "s";
+      project.model = new Model();
+      project.isSynced = projectStateEnum.SYNCED;
+
       return {
         ...state,
         projects: { ...state.projects, [project._id]: project }
@@ -107,7 +115,7 @@ export default function(state = initialState, action) {
       const { _id, name } = action.payload;
       const selectedProject = Object.assign({}, state.projects[_id]);
       selectedProject.name = name;
-      selectedProject.isSynced = "n";
+      selectedProject.isSynced = projectStateEnum.NOT_SYNCED;
       return {
         ...state,
         projects: { ...state.projects, [_id]: selectedProject }
@@ -124,7 +132,7 @@ export default function(state = initialState, action) {
     }
     case SYNC: {
       const project = action.payload;
-      project.isSynced = "s";
+      project.isSynced = projectStateEnum.SYNCED;
       return {
         ...state,
         projects: { ...state.projects, [project._id]: project }
@@ -132,7 +140,8 @@ export default function(state = initialState, action) {
     }
     case SYNC_ALL: {
       const projects = Object.map(action.payload, project => {
-        project.isSynced = "s";
+        if (project.isSynced !== projectStateEnum.NOT_LOADED)
+          project.isSynced = projectStateEnum.SYNCED;
         return project;
       });
       return {

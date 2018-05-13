@@ -34,7 +34,6 @@ export default class Tabs extends Component {
         </div>
         <div id="tab-prod" className="tab">
           <Canvas />
-
           <div id="error-message" />
         </div>
         <div id="tab-supply" className="tab" style={{ display: "none" }} />
