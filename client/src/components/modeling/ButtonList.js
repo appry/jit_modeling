@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import controlsEnum from "../../utils/controlsEnum";
-import { setControl } from "../../actions/controlsActions";
+import buttonsEnum from "../../utils/buttonsEnum";
+import { selectButton } from "../../actions/controlsActions";
 import { connect } from "react-redux";
 import classnames from "classnames";
 
-class Controls extends Component {
+class ButtonList extends Component {
   constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
   }
   onClick(e) {
-    this.props.setControl(e.target.dataset.control);
+    this.props.selectButton(e.target.dataset.control);
   }
   render() {
     return (
@@ -18,27 +18,27 @@ class Controls extends Component {
         <ul className="list-group">
           <li
             className={classnames("list-group-item", {
-              active: this.props.selected === controlsEnum.PLACE
+              active: this.props.button === buttonsEnum.PLACE
             })}
-            data-control={controlsEnum.PLACE}
+            data-control={buttonsEnum.PLACE}
             onClick={this.onClick}
           >
             Place
           </li>
           <li
             className={classnames("list-group-item", {
-              active: this.props.selected === controlsEnum.TRANSITION
+              active: this.props.button === buttonsEnum.TRANSITION
             })}
-            data-control={controlsEnum.TRANSITION}
+            data-control={buttonsEnum.TRANSITION}
             onClick={this.onClick}
           >
             Transition
           </li>
           <li
             className={classnames("list-group-item", {
-              active: this.props.selected === controlsEnum.EDGE
+              active: this.props.button === buttonsEnum.EDGE
             })}
-            data-control={controlsEnum.EDGE}
+            data-control={buttonsEnum.EDGE}
             onClick={this.onClick}
           >
             Edge
@@ -51,8 +51,8 @@ class Controls extends Component {
 
 const mapStateToProps = function(state) {
   return {
-    selected: state.controls.selected
+    button: state.controls.button
   };
 };
 
-export default connect(mapStateToProps, { setControl })(Controls);
+export default connect(mapStateToProps, { selectButton })(ButtonList);

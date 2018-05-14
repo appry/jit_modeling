@@ -11,6 +11,5 @@ export default combineReducers({
   errors: errorReducer,
   projects: projectsReducer,
   controls: controlsReducer,
-  model: modelReducer,
   settings: settingsReducer
 });

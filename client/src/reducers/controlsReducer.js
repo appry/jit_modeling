@@ -1,15 +1,22 @@
-import { SET_CONTROL } from "../actions/types";
+import { SELECT_BUTTON, SELECT_ELEMENT } from "../actions/types";
 
 const initialState = {
-  selected: null
+  button: null,
+  element: null
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case SET_CONTROL:
-      if (state.selected === action.payload) action.payload = null;
+    case SELECT_BUTTON:
+      if (state.button === action.payload) action.payload = null;
       return {
-        selected: action.payload
+        ...state,
+        button: action.payload
+      };
+    case SELECT_ELEMENT:
+      return {
+        ...state,
+        element: action.payload
       };
     default:
       return state;

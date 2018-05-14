@@ -1,9 +1,15 @@
-import { SET_CONTROL } from "./types";
+import { SELECT_BUTTON, SELECT_ELEMENT } from "./types";
 
-//Set control
-export const setControl = control => {
+export const selectButton = button => {
   return {
-    type: SET_CONTROL,
-    payload: control
+    type: SELECT_BUTTON,
+    payload: button
+  };
+};
+
+export const selectElement = element => {
+  return {
+    type: SELECT_ELEMENT,
+    payload: element
   };
 };

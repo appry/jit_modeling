@@ -9,14 +9,18 @@ export const DELETE_PROJECT = "DELETE_PROJECT";
 export const SYNC_ALL = "SYNC_ALL";
 export const SYNC = "SYNC";
 export const PROJECT_SYNCING = "PROJECT_SYNCING";
-export const SET_CONTROL = "SET_CONTROL";
+
 export const GET_PROJECTS_INFO = "GET_PROJECTS_INFO";
 export const GET_PROJECT = "GET_PROJECT";
 
-export const CREATE_NODE = "CREATE_NODE";
+export const CREATE_PLACE = "CREATE_PLACE";
+export const CREATE_TRANSITION = "CREATE_TRANSITION";
 export const DELETE_NODE = "DELETE_NODE";
 export const RENAME_NODE = "RENAME_NODE";
 export const MOVE_NODE = "MOVE_NODE";
+
+export const SELECT_BUTTON = "SELECT_BUTTON";
+export const SELECT_ELEMENT = "SELECT_ELEMENT";
 
 export const CREATE_EDGE = "CREATE_EDGE";
 export const DELETE_EDGE = "DELETE_EDGE";

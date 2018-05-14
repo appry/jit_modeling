@@ -4,7 +4,7 @@ import AddProject from "./AddProject";
 import ProjectsList from "./ProjectsList";
 import ManagerPanel from "./ManagerPanel";
 import Tabs from "./Tabs";
-import Controls from "./Controls";
+import ButtonList from "./ButtonList";
 
 class ModelingPage extends Component {
   render() {
@@ -25,7 +25,7 @@ class ModelingPage extends Component {
               </div>
             </div>
             <div className="controls-container border">
-              <Controls />
+              <ButtonList />
             </div>
           </div>
           <Tabs />

@@ -1,5 +1,5 @@
 import nodeTypeEnum from "./utils/nodeTypeEnum";
-
+import defaultSetiings from "./config/defaultSettings";
 const uuidv4 = require("uuid/v4");
 
 function Node(x, y, name, nodeType) {
@@ -13,11 +13,14 @@ function Node(x, y, name, nodeType) {
 }
 
 export function Place(x, y, name = "Place") {
-  Node(x, y, name, nodeTypeEnum.PLACE);
+  Node.call(this, x, y, name, nodeTypeEnum.PLACE);
+  this.radius = defaultSetiings.radius;
 }
 
 export function Transition(x, y, name = "Transition") {
-  Node(x, y, name, nodeTypeEnum.TRANSITION);
+  Node.call(this, x, y, name, nodeTypeEnum.TRANSITION);
+  this.width = defaultSetiings.width;
+  this.height = defaultSetiings.height;
   this.products = {};
 }
 

@@ -38,7 +38,6 @@ router.get(
   (req, res) => {
     Project.find({ user: req.user.id })
       .then(projects => {
-        console.log("TEST");
         let obj = {};
         for (let project of projects) {
           obj[project._id] = project;
@@ -60,7 +59,6 @@ router.get(
   (req, res) => {
     Project.findOne({ user: req.user.id, _id: req.params.id })
       .then(project => {
-        console.log(project);
         res.json(project.model);
       })
       .catch(err => {
