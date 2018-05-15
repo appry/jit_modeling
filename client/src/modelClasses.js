@@ -63,4 +63,5 @@ export function Model() {
   this.products = {};
   this.suppliers = {};
   this.supplies = {};
+  this.elementsOrder = [];
 }

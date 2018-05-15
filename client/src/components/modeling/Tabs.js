@@ -32,10 +32,8 @@ export default class Tabs extends Component {
             Optimisation
           </button>
         </div>
-        <div id="tab-prod" className="tab">
-          <Canvas />
-          <div id="error-message" />
-        </div>
+        <Canvas />
+
         <div id="tab-supply" className="tab" style={{ display: "none" }} />
         <div id="tab-opt" className="tab" style={{ display: "none" }} />
       </div>

@@ -81,3 +81,17 @@ canvas {
 #model-tabs {
   background: rgb(221, 221, 221);
 }
+
+#error-message {
+  background-color: #a12525;
+  color: white;
+  box-sizing: border-box;
+  padding: 10px;
+  max-width: 300px;
+  width: 300px;
+  border-radius: 10px;
+  position: absolute;
+  display: none;
+  top: 5px;
+  left: 5px;
+}

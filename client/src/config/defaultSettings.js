@@ -3,10 +3,13 @@ module.exports = {
   fontFamily: "Arial",
   fillStyle: "white",
   strokeStyle: "black",
+  selectStrokeStyle: "blue",
   textBaseline: "top",
-  radius: 30,
-
-  width: 30,
+  radius: 54,
+  edgePointStart: "blue",
+  edgePointEnd: "yellow",
+  edgePointRadius: 5,
+  width: 41,
   height: 60,
   gridNodeSize: 15
 };

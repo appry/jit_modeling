@@ -1,8 +1,14 @@
-import { CREATE_PLACE } from "./types";
-import { CREATE_TRANSITION } from "./types";
-import { DELETE_NODE } from "./types";
-import { MOVE_NODE } from "./types";
-import { RENAME_NODE } from "./types";
+import {
+  CREATE_PLACE,
+  CREATE_TRANSITION,
+  DELETE_NODE,
+  MOVE_NODE,
+  RENAME_NODE,
+  CREATE_EDGE,
+  DELETE_EDGE,
+  RENAME_EDGE,
+  SELECT_ELEMENT
+} from "./types";
 
 export const createPlace = pos => {
   return {
@@ -20,18 +26,18 @@ export const createTransition = pos => {
   };
 };
 
-export const deleteNode = pos => {
+export const deleteNode = id => {
   return {
     type: DELETE_NODE,
-    payload: pos,
+    payload: id,
     modelChanged: true
   };
 };
 
-export const moveNode = pos => {
+export const moveNode = args => {
   return {
     type: MOVE_NODE,
-    payload: pos,
+    payload: args,
     modelChanged: true
   };
 };
@@ -40,6 +46,27 @@ export const renameNode = pos => {
   return {
     type: RENAME_NODE,
     payload: pos,
+    modelChanged: true
+  };
+};
+export const createEdge = args => {
+  return {
+    type: CREATE_EDGE,
+    payload: args,
+    modelChanged: true
+  };
+};
+export const deleteEdge = id => {
+  return {
+    type: DELETE_EDGE,
+    payload: id,
+    modelChanged: true
+  };
+};
+export const selectElement = element => {
+  return {
+    type: SELECT_ELEMENT,
+    payload: element,
     modelChanged: true
   };
 };

@@ -22,7 +22,6 @@ const initialState = {
 
 export default function(state = initialState, action) {
   if (action.modelChanged) {
-    console.log(`in modle chagne ${action.modelChanged}`);
     const _id = state.selectedProjectId;
     const project = state.projects[_id];
     const model = project.model;

@@ -24,6 +24,14 @@ Object.filter = (obj, predicate) =>
 
 Object.map = (obj, callback) =>
   Object.assign({}, ...Object.keys(obj).map(k => ({ [k]: callback(obj[k]) })));
+Object.find = (obj, callback) => {
+  for (let prop in obj) {
+    if (obj.hasOwnProperty(prop)) {
+      if (callback(obj[prop])) return obj[prop];
+    }
+  }
+  return undefined;
+};
 // Check for token
 if (localStorage.jwtToken) {
   // Set auth token header auth

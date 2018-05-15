@@ -1,8 +1,7 @@
-import { SELECT_BUTTON, SELECT_ELEMENT } from "../actions/types";
+import { SELECT_BUTTON } from "../actions/types";
 
 const initialState = {
-  button: null,
-  element: null
+  button: null
 };
 
 export default function(state = initialState, action) {
@@ -13,11 +12,7 @@ export default function(state = initialState, action) {
         ...state,
         button: action.payload
       };
-    case SELECT_ELEMENT:
-      return {
-        ...state,
-        element: action.payload
-      };
+
     default:
       return state;
   }
