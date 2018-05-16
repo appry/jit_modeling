@@ -28,6 +28,17 @@
   padding: 5px;
   cursor: pointer;
 }
+.controls-container {
+  flex: 1;
+  overflow-y: auto;
+}
+.toolbox-container {
+  flex: 1;
+  overflow-y: auto;
+}
+.btn-toolbox {
+  margin: 5px;
+}
 .projects-container {
   flex: 1;
   display: flex;
@@ -45,11 +56,6 @@
 
 .project-list-item {
   width: 100%;
-}
-
-.controls-container {
-  flex: 1;
-  overflow-y: auto;
 }
 
 .container {

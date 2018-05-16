@@ -421,35 +421,15 @@ class Canvas extends Component {
     let distY = Math.abs(y2 - y1);
     let dist = Math.sqrt(distX * distX + distY * distY);
     let k1 = p.radius / dist;
-    //top right
-    if (t.x >= p.x && t.y <= p.y) {
-      x1 = x1 + distX * k1;
-      y1 = y1 - distY * k1;
-      x2 = x2 - (distX < p.radius ? distX * k1 : t.width / 2);
-      y2 = y2 + distY * k1;
-    }
-    //bottom right
-    else if (t.x >= p.x && t.y > p.y) {
-      x1 = x1 + distX * k1;
-      y1 = y1 + distY * k1;
-      x2 = x2 - (distX <= p.radius ? distX * k1 : t.width / 2);
-      y2 = y2 - distY * k1;
-    }
-    //top left
-    else if (t.x < p.x && t.y <= p.y) {
-      x1 = x1 - distX * k1;
-      y1 = y1 - distY * k1;
-      x2 = x2 + (distX < p.radius ? distX * k1 : t.width / 2);
-      y2 = y2 + distY * k1;
-    }
-    //bottom left
-    else {
-      x1 = x1 - distX * k1;
-      y1 = y1 + distY * k1;
-      x2 = x2 + (distX < p.radius ? distX * k1 : t.width / 2);
-      y2 = y2 - distY * k1;
-    }
-    return { x1: x1, y1: y1, x2: x2, y2: y2 };
+    let k2 = t.height / 2 / distY;
+    let k3 = t.width / 2 / distX;
+    let signX = Math.sign(t.x - p.x);
+    let signY = Math.sign(t.y - p.y);
+    x1 = x1 + signX * distX * k1;
+    y1 = y1 + signY * distY * k1;
+    x2 = x2 - signX * (distX * k2 < t.width / 2 ? distX * k2 : t.width / 2);
+    y2 = y2 - signY * (distY * k3 < t.height / 2 ? distY * k3 : t.height / 2);
+    return { x1, y1, x2, y2 };
   }
   drawNode(node) {
     switch (node.nodeType) {

@@ -25,3 +25,7 @@ export const SELECT_ELEMENT = "SELECT_ELEMENT";
 export const CREATE_EDGE = "CREATE_EDGE";
 export const DELETE_EDGE = "DELETE_EDGE";
 export const RENAME_EDGE = "RENAME_EDGE";
+export const DELETE_SELECTED = "DELETE_SELECTED";
+export const COPY_SELECTED = "COPY_SELECTED";
+export const TO_FRONT = "TO_FRONT";
+export const TO_BACK = "TO_BACK";

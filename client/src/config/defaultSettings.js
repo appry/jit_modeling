@@ -10,6 +10,6 @@ module.exports = {
   edgePointEnd: "yellow",
   edgePointRadius: 5,
   width: 41,
-  height: 60,
+  height: 120,
   gridNodeSize: 15
 };

@@ -7,10 +7,17 @@ import {
   CREATE_EDGE,
   DELETE_EDGE,
   RENAME_EDGE,
-  SELECT_ELEMENT
+  SELECT_ELEMENT,
+  DELETE_SELECTED,
+  COPY_SELECTED,
+  TO_FRONT,
+  TO_BACK
 } from "../actions/types";
-
+import nodeTypeEnum from "../utils/nodeTypeEnum";
 import { Place, Transition, Edge, Product } from "../modelClasses";
+import { getNormalPos } from "../utils/canvas/helpers";
+import defaultSettings from "../config/defaultSettings";
+const uuidv4 = require("uuid/v4");
 
 const initialState = {
   nodes: {},
@@ -68,11 +75,20 @@ export default function(state = initialState, action) {
         data.x2,
         data.y2
       );
+      let nodeFrom = state.nodes[data.nodeFrom];
+      let nodeTo = state.nodes[data.nodeTo];
+      nodeFrom.outputs.push(newEdge.id);
+      nodeTo.inputs.push(newEdge.id);
       return {
         ...state,
         edges: {
           ...state.edges,
           [newEdge.id]: newEdge
+        },
+        nodes: {
+          ...state.nodes,
+          [nodeFrom.id]: nodeFrom,
+          [nodeTo.id]: nodeTo
         },
         elementsOrder: [...state.elementsOrder, newEdge.id],
         selected: newEdge.id
@@ -82,6 +98,100 @@ export default function(state = initialState, action) {
       return {
         ...state,
         selected: action.payload
+      };
+    }
+    case DELETE_SELECTED: {
+      if (!state.selected) return state;
+      let id = state.selected;
+      let selected = state.edges[id] || state.nodes[id];
+      console.log(selected);
+      let edges = { ...state.edges };
+      let nodes = { ...state.nodes };
+      console.log(edges);
+      let elementsOrder = [];
+      if (selected.nodeType) {
+        edges = Object.filter(
+          edges,
+          edge => edge.nodeFrom !== id && edge.nodeTo !== id
+        );
+        let edgesToDelete = selected.inputs.concat(selected.outputs);
+        console.log(edgesToDelete);
+        for (let i = 0; i < state.elementsOrder.length; i++) {
+          if (
+            !edgesToDelete.find(edge => edge === state.elementsOrder[i]) &&
+            state.elementsOrder[i] !== selected.id
+          )
+            elementsOrder.push(state.elementsOrder[i]);
+        }
+        delete nodes[id];
+      } else {
+        let nodeFrom = edges[id].nodeFrom;
+        let nodeTo = edges[id].nodeTo;
+        let index = nodes[nodeFrom].outputs.indexOf(id);
+        nodes[nodeFrom].outputs.splice(index, 1);
+        let index2 = nodes[nodeTo].inputs.indexOf(id);
+        nodes[nodeTo].inputs.splice(index2, 1);
+        for (let el of state.elementsOrder) {
+          if (el !== selected.id) elementsOrder.push(el);
+        }
+        delete edges[id];
+      }
+      return {
+        ...state,
+        nodes,
+        edges,
+        elementsOrder,
+        selected: null
+      };
+    }
+    case COPY_SELECTED: {
+      if (!state.selected) return state;
+      let id = state.selected;
+      let selected = state.edges[id] || state.nodes[id];
+      if (selected.nodeType) {
+        let copy = { ...selected };
+        copy.id = uuidv4();
+        let pos = getNormalPos({
+          x: selected.x + defaultSettings.gridNodeSize,
+          y: selected.y + defaultSettings.gridNodeSize
+        });
+        copy.x = pos.x;
+        copy.y = pos.y;
+        copy.inputs = copy.outputs = [];
+        return {
+          ...state,
+          nodes: { ...state.nodes, [copy.id]: copy },
+          elementsOrder: [...state.elementsOrder, copy.id],
+          selected: copy.id
+        };
+      } else {
+      }
+      return state;
+    }
+    case TO_BACK: {
+      if (!state.selected) return state;
+      let id = state.selected;
+      let selected = state.edges[id] || state.nodes[id];
+      let elementsOrder = [...state.elementsOrder];
+      let index = elementsOrder.indexOf(id);
+      elementsOrder.splice(index, 1);
+      elementsOrder.unshift(id);
+      return {
+        ...state,
+        elementsOrder
+      };
+    }
+    case TO_FRONT: {
+      if (!state.selected) return state;
+      let id = state.selected;
+      let selected = state.edges[id] || state.nodes[id];
+      let elementsOrder = [...state.elementsOrder];
+      let index = elementsOrder.indexOf(id);
+      elementsOrder.splice(index, 1);
+      elementsOrder.push(id);
+      return {
+        ...state,
+        elementsOrder
       };
     }
     default:

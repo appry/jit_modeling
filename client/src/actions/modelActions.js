@@ -7,7 +7,11 @@ import {
   CREATE_EDGE,
   DELETE_EDGE,
   RENAME_EDGE,
-  SELECT_ELEMENT
+  SELECT_ELEMENT,
+  DELETE_SELECTED,
+  COPY_SELECTED,
+  TO_FRONT,
+  TO_BACK
 } from "./types";
 
 export const createPlace = pos => {
@@ -25,7 +29,12 @@ export const createTransition = pos => {
     modelChanged: true
   };
 };
-
+export const deleteSelected = () => {
+  return {
+    type: DELETE_SELECTED,
+    modelChanged: true
+  };
+};
 export const deleteNode = id => {
   return {
     type: DELETE_NODE,
@@ -67,6 +76,27 @@ export const selectElement = element => {
   return {
     type: SELECT_ELEMENT,
     payload: element,
+    modelChanged: true
+  };
+};
+
+export const copySelected = () => {
+  return {
+    type: COPY_SELECTED,
+    modelChanged: true
+  };
+};
+
+export const toFront = () => {
+  return {
+    type: TO_FRONT,
+    modelChanged: true
+  };
+};
+
+export const toBack = () => {
+  return {
+    type: TO_BACK,
     modelChanged: true
   };
 };

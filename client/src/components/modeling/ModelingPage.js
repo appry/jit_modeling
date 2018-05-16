@@ -5,6 +5,7 @@ import ProjectsList from "./ProjectsList";
 import ManagerPanel from "./ManagerPanel";
 import Tabs from "./Tabs";
 import ButtonList from "./ButtonList";
+import Toolbox from "./Toolbox";
 
 class ModelingPage extends Component {
   render() {
@@ -23,6 +24,9 @@ class ModelingPage extends Component {
               <div className="projects-list-container">
                 <ProjectsList />
               </div>
+            </div>
+            <div className="toolbox-container border">
+              <Toolbox />
             </div>
             <div className="controls-container border">
               <ButtonList />
