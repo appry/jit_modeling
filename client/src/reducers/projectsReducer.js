@@ -23,10 +23,11 @@ const initialState = {
 export default function(state = initialState, action) {
   if (action.modelChanged) {
     const _id = state.selectedProjectId;
+    if (!_id || !state.projects[_id].model) return state;
     const project = state.projects[_id];
     const model = project.model;
     const newModel = modelReducer(model, action);
-    if (model === undefined) return;
+    if (model === undefined) return state;
     return {
       ...state,
       projects: {

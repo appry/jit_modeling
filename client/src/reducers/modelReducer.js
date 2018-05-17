@@ -11,10 +11,20 @@ import {
   DELETE_SELECTED,
   COPY_SELECTED,
   TO_FRONT,
-  TO_BACK
+  TO_BACK,
+  CREATE_SUPPLIER,
+  DELETE_SUPPLIER,
+  RENAME_SUPPLIER
 } from "../actions/types";
 import nodeTypeEnum from "../utils/nodeTypeEnum";
-import { Place, Transition, Edge, Product } from "../modelClasses";
+import {
+  Place,
+  Transition,
+  Edge,
+  Product,
+  Supplier,
+  Supply
+} from "../modelClasses";
 import { getNormalPos } from "../utils/canvas/helpers";
 import defaultSettings from "../config/defaultSettings";
 const uuidv4 = require("uuid/v4");
@@ -104,10 +114,8 @@ export default function(state = initialState, action) {
       if (!state.selected) return state;
       let id = state.selected;
       let selected = state.edges[id] || state.nodes[id];
-      console.log(selected);
       let edges = { ...state.edges };
       let nodes = { ...state.nodes };
-      console.log(edges);
       let elementsOrder = [];
       if (selected.nodeType) {
         edges = Object.filter(
@@ -115,7 +123,6 @@ export default function(state = initialState, action) {
           edge => edge.nodeFrom !== id && edge.nodeTo !== id
         );
         let edgesToDelete = selected.inputs.concat(selected.outputs);
-        console.log(edgesToDelete);
         for (let i = 0; i < state.elementsOrder.length; i++) {
           if (
             !edgesToDelete.find(edge => edge === state.elementsOrder[i]) &&
@@ -192,6 +199,24 @@ export default function(state = initialState, action) {
       return {
         ...state,
         elementsOrder
+      };
+    }
+    case CREATE_SUPPLIER: {
+      const newSupplier = new Supplier(action.payload);
+      return {
+        ...state,
+        suppliers: { ...state.suppliers, [newSupplier.id]: newSupplier }
+      };
+    }
+    case RENAME_SUPPLIER: {
+      let supplier = state.suppliers[action.payload.id];
+
+      return {
+        ...state,
+        suppliers: {
+          ...state.suppliers,
+          [supplier.id]: { ...supplier, name: action.payload.name }
+        }
       };
     }
     default:

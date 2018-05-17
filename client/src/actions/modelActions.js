@@ -11,7 +11,10 @@ import {
   DELETE_SELECTED,
   COPY_SELECTED,
   TO_FRONT,
-  TO_BACK
+  TO_BACK,
+  CREATE_SUPPLIER,
+  DELETE_SUPPLIER,
+  RENAME_SUPPLIER
 } from "./types";
 
 export const createPlace = pos => {
@@ -97,6 +100,30 @@ export const toFront = () => {
 export const toBack = () => {
   return {
     type: TO_BACK,
+    modelChanged: true
+  };
+};
+
+export const createSupplier = name => {
+  return {
+    type: CREATE_SUPPLIER,
+    payload: name,
+    modelChanged: true
+  };
+};
+
+export const deleteSupplier = id => {
+  return {
+    type: DELETE_SUPPLIER,
+    payload: id,
+    modelChanged: true
+  };
+};
+
+export const renameSupplier = args => {
+  return {
+    type: RENAME_SUPPLIER,
+    payload: args,
     modelChanged: true
   };
 };

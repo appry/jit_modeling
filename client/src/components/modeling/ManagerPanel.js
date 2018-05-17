@@ -16,7 +16,8 @@ class ManagerPanel extends Component {
     };
   }
 
-  shouldComponentUpdate() {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.name !== nextProps.name) return true;
     return false;
   }
 
@@ -27,7 +28,9 @@ class ManagerPanel extends Component {
   onClick(e) {
     if (isEmpty(this.props.selectedProjectId) || isEmpty(this.state.name))
       return;
-    this.props.renameProject(this.state.name, this.props.selectedProjectId);
+    const name = this.state.name;
+
+    this.props.renameProject(name, this.props.selectedProjectId);
   }
 
   handleDelete() {
@@ -87,7 +90,10 @@ class ManagerPanel extends Component {
 const mapStateToProps = function(state) {
   return {
     projects: state.projects.projects,
-    selectedProjectId: state.projects.selectedProjectId
+    selectedProjectId: state.projects.selectedProjectId,
+    name: state.projects.selectedProjectId
+      ? state.projects.projects[state.projects.selectedProjectId].name
+      : ""
   };
 };
 

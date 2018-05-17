@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Canvas from "./Canvas";
+import TableSuppliers from "./TableSuppliers";
 import openTab from "../../utils/openTab";
 
 export default class Tabs extends Component {
@@ -34,7 +35,19 @@ export default class Tabs extends Component {
         </div>
         <Canvas />
 
-        <div id="tab-supply" className="tab" style={{ display: "none" }} />
+        <div id="tab-supply" className="tab" style={{ display: "none" }}>
+          <div className="tables-container">
+            <div id="suppliers" className="border">
+              <TableSuppliers />
+            </div>
+            <div id="products" className="border">
+              hi
+            </div>
+            <div id="supplies" className="border">
+              hi
+            </div>
+          </div>
+        </div>
         <div id="tab-opt" className="tab" style={{ display: "none" }} />
       </div>
     );

@@ -442,6 +442,7 @@ class Canvas extends Component {
             ? defaultSettings.selectStrokeStyle
             : defaultSettings.strokeStyle
         );
+        this.drawText(node.name, node.x, node.y + node.radius);
         break;
       }
       case nodeTypeEnum.TRANSITION: {
@@ -454,10 +455,13 @@ class Canvas extends Component {
             ? defaultSettings.selectStrokeStyle
             : defaultSettings.strokeStyle
         );
+
+        this.drawText(node.name, node.x, node.y + node.height / 2);
         break;
       }
     }
   }
+
   drawEdge(edge) {
     let nodeFrom = this.props.nodes[edge.nodeFrom];
     let nodeTo = this.props.nodes[edge.nodeTo];
@@ -482,6 +486,19 @@ class Canvas extends Component {
           ? defaultSettings.selectStrokeStyle
           : defaultSettings.strokeStyle
       );
+
+    this.drawText(
+      edge.name,
+      (edgePos.x1 + edgePos.x2) / 2,
+      (edgePos.y1 + edgePos.y2) / 2 + 10
+    );
+  }
+  drawText(msg, x, y) {
+    this.ctx.textBaseline = "top";
+    this.ctx.textAlign = "center";
+    this.ctx.fillStyle = defaultSettings.textFillStyle;
+    this.ctx.font = defaultSettings.font;
+    this.ctx.fillText(msg, x, y);
   }
   drawCircle(x, y, radius, strokeStyle) {
     this.ctx.beginPath();

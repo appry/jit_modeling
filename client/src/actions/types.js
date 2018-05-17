@@ -29,3 +29,7 @@ export const DELETE_SELECTED = "DELETE_SELECTED";
 export const COPY_SELECTED = "COPY_SELECTED";
 export const TO_FRONT = "TO_FRONT";
 export const TO_BACK = "TO_BACK";
+
+export const CREATE_SUPPLIER = "CREATE_SUPPLIER";
+export const RENAME_SUPPLIER = "RENAME_SUPPLIER";
+export const DELETE_SUPPLIER = "DELETE_SUPPLIER";

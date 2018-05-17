@@ -2,6 +2,8 @@ module.exports = {
   fontSize: "16",
   fontFamily: "Arial",
   fillStyle: "white",
+  textFillStyle: "black",
+  font: "14px sans-serif",
   strokeStyle: "black",
   selectStrokeStyle: "blue",
   textBaseline: "top",

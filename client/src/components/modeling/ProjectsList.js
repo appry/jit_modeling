@@ -22,7 +22,11 @@ class ProjectsList extends Component {
   render() {
     console.log("ProjectsList rendered");
     if (this.props.loading) return <Spinner />;
-    const listItems = Object.values(this.props.projects).map(p => (
+    const listedKeys = Object.values(this.props.projects);
+    listedKeys.sort(
+      (p1, p2) => new Date(p2.createdAt) - new Date(p1.createdAt)
+    );
+    const listItems = listedKeys.map(p => (
       <li key={p._id} className="list-group-item">
         <button
           id={p._id}
@@ -39,7 +43,8 @@ class ProjectsList extends Component {
               "fas fa-check-circle": p.isSynced === projectStateEnum.SYNCED,
               "fas fa-exclamation-circle":
                 p.isSynced === projectStateEnum.NOT_SYNCED,
-              "fas fa-spinner fa-spin": p.isSynced === projectStateEnum.LOADING,
+              "fas fa-sync-alt fa-spin":
+                p.isSynced === projectStateEnum.LOADING,
               "fas fa-download": p.isSynced === projectStateEnum.NOT_LOADED
             })}
           />
@@ -63,7 +68,8 @@ const mapStateToProps = function(state) {
   props.projects = Object.map(state.projects.projects, project => ({
     _id: project._id,
     name: project.name,
-    isSynced: project.isSynced
+    isSynced: project.isSynced,
+    createdAt: project.createdAt
   }));
   return props;
 };
