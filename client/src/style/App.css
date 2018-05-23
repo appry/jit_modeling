@@ -128,6 +128,7 @@ table {
   height: 100%;
 }
 thead {
+  width: calc(100% - 18px);
 }
 tbody {
   display: block;
@@ -140,13 +141,62 @@ thead,
 tbody tr {
   display: table;
   table-layout: fixed;
+}
+tbody tr {
   width: 100%;
 }
-table,
-tbody,
+
+/* tbody,
 thead,
 td,
-tr {
-  border: 1px solid rgb(221, 221, 221);
+tr,
+th {
   border-collapse: collapse;
+} */
+table input {
+  border: none;
+  width: 100%;
+}
+td:last-child,
+th:last-child {
+  width: 25px;
+}
+
+.inputs-add {
+  width: calc((100% - 30px) / 5);
+  text-overflow: ellipsis;
+}
+.inputs-table {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+.btn-add {
+  width: 30px;
+}
+
+select {
+  border: none;
+}
+thead tr {
+  background: lightgrey;
+  height: 30px;
+}
+td {
+  border: 1px solid grey;
+}
+tbody tr:nth-child(even) {
+  background: lightgrey;
+}
+.input-is-invalid {
+  border: 1px solid red;
+}
+table input:focus,
+select:focus {
+  outline: none;
+}
+table input,
+select {
+  background: transparent;
+  width: 100%;
 }

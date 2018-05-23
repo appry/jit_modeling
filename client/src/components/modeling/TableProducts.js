@@ -1,23 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
-  updateSupplier,
-  deleteSupplier,
-  createSupplier
+  updateProduct,
+  deleteProduct,
+  createProduct
 } from "../../actions/modelActions";
-import AddSupplier from "./AddSupplier";
-import TableSuppliersRow from "./TableSuppliersRow";
+import AddProduct from "./AddProduct";
+import TableProductsRow from "./TableProductsRow";
 
-class TableSuppliers extends Component {
+class TableProducts extends Component {
   render() {
-    console.log("suppliers rendered");
-    const suppliersList = Object.values(this.props.suppliers).map(supplier => {
+    console.log("products rendered");
+    const productsList = Object.values(this.props.products).map(product => {
       return (
-        <TableSuppliersRow
-          key={supplier.id}
-          update={this.props.updateSupplier}
-          delete={this.props.deleteSupplier}
-          supplier={supplier}
+        <TableProductsRow
+          key={product.id}
+          update={this.props.updateProduct}
+          delete={this.props.deleteProduct}
+          product={product}
         />
       );
     });
@@ -27,14 +27,15 @@ class TableSuppliers extends Component {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Storage price</th>
               <th />
             </tr>
-            <AddSupplier
-              create={this.props.createSupplier}
+            <AddProduct
+              create={this.props.createProduct}
               isActive={this.props.isActive}
             />
           </thead>
-          <tbody>{suppliersList}</tbody>
+          <tbody>{productsList}</tbody>
         </table>
       </div>
     );
@@ -46,24 +47,24 @@ const mapStateToProps = state => {
   if (!id) {
     return {
       isActive: false,
-      suppliers: {}
+      products: {}
     };
   }
   const model = state.projects.projects[id].model;
   if (!model) {
     return {
       isActive: false,
-      suppliers: {}
+      products: {}
     };
   }
   return {
-    suppliers: model.suppliers,
+    products: model.products,
     isActive: true
   };
 };
 
 export default connect(mapStateToProps, {
-  updateSupplier,
-  createSupplier,
-  deleteSupplier
-})(TableSuppliers);
+  updateProduct,
+  createProduct,
+  deleteProduct
+})(TableProducts);

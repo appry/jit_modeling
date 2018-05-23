@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import Canvas from "./Canvas";
 import TableSuppliers from "./TableSuppliers";
+import TableProducts from "./TableProducts";
+import TableSupplies from "./TableSupplies";
 import openTab from "../../utils/openTab";
 
 export default class Tabs extends Component {
@@ -41,10 +43,10 @@ export default class Tabs extends Component {
               <TableSuppliers />
             </div>
             <div id="products" className="border">
-              hi
+              <TableProducts />
             </div>
             <div id="supplies" className="border">
-              hi
+              <TableSupplies />
             </div>
           </div>
         </div>

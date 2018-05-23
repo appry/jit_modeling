@@ -14,7 +14,21 @@ import {
   TO_BACK,
   CREATE_SUPPLIER,
   DELETE_SUPPLIER,
-  RENAME_SUPPLIER
+  RENAME_SUPPLIER,
+  CREATE_PRODUCT,
+  DELETE_PRODUCT,
+  RENAME_PRODUCT,
+  CHANGE_STORAGE_PRICE,
+  CREATE_SUPPLY,
+  DELETE_SUPPLY,
+  CHANGE_SUPPLY_PRODUCT,
+  CHANGE_SUPPLY_SUPPLIER,
+  CHANGE_SUPPLY_PRICE,
+  CHANGE_SUPPLY_TIME,
+  CHANGE_SUPPLY_MAX,
+  UPDATE_SUPPLIER,
+  UPDATE_PRODUCT,
+  UPDATE_SUPPLY
 } from "../actions/types";
 import nodeTypeEnum from "../utils/nodeTypeEnum";
 import {
@@ -202,23 +216,118 @@ export default function(state = initialState, action) {
       };
     }
     case CREATE_SUPPLIER: {
-      const newSupplier = new Supplier(action.payload);
+      const newSupplier = new Supplier(action.payload.name);
       return {
         ...state,
         suppliers: { ...state.suppliers, [newSupplier.id]: newSupplier }
       };
     }
-    case RENAME_SUPPLIER: {
-      let supplier = state.suppliers[action.payload.id];
+
+    case DELETE_SUPPLIER: {
+      const id = action.payload;
+      const suppliers = { ...state.suppliers };
+      const supplies = Object.filter(
+        state.supplies,
+        supply => supply.supplier !== id
+      );
+      delete suppliers[id];
+      return {
+        ...state,
+        suppliers,
+        supplies
+      };
+    }
+
+    case CREATE_PRODUCT: {
+      const newProduct = new Product(
+        action.payload.name,
+        action.payload.storagePrice
+      );
+      return {
+        ...state,
+        products: { ...state.products, [newProduct.id]: newProduct }
+      };
+    }
+
+    case DELETE_PRODUCT: {
+      const id = action.payload;
+      const products = { ...state.products };
+      const supplies = Object.filter(
+        state.supplies,
+        supply => supply.product !== id
+      );
+      delete products[id];
+      return {
+        ...state,
+        products,
+        supplies
+      };
+    }
+    //Supplies
+    case DELETE_SUPPLY: {
+      const id = action.payload;
+      const supplies = { ...state.supplies };
+      delete supplies[id];
+      return {
+        ...state,
+        supplies
+      };
+    }
+
+    case CREATE_SUPPLY: {
+      const args = action.payload;
+      const newSupply = new Supply(
+        args.product,
+        args.supplier,
+        args.max,
+        args.time,
+        args.price
+      );
+      return {
+        ...state,
+        supplies: { ...state.supplies, [newSupply.id]: newSupply }
+      };
+    }
+
+    //updates
+
+    case UPDATE_SUPPLIER: {
+      let supplier = { ...state.suppliers[action.payload.id] };
+      const data = action.payload;
+      supplier.name = data.name;
+      return {
+        ...state,
+        suppliers: { ...state.suppliers, [supplier.id]: supplier }
+      };
+    }
+
+    case UPDATE_PRODUCT: {
+      let product = { ...state.products[action.payload.id] };
+      const data = action.payload;
+      product.name = data.name;
+      product.storagePrice = data.storagePrice;
+      return {
+        ...state,
+        products: { ...state.products, [product.id]: product }
+      };
+    }
+
+    case UPDATE_SUPPLY: {
+      let supply = { ...state.supplies[action.payload.id], ...action.payload };
+      //const data = action.payload;
+      // supply.name = data.name;
+      // supply.product = data.product;
+      // supply.supplier = data.supplier;
+      // supply.max = data.max;
+      // supply.time = data.time;
+      // supply.price = data.price;
 
       return {
         ...state,
-        suppliers: {
-          ...state.suppliers,
-          [supplier.id]: { ...supplier, name: action.payload.name }
-        }
+        supplies: { ...state.supplies, [supply.id]: supply }
       };
     }
+
     default:
       return state;
   }
