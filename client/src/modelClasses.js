@@ -19,9 +19,10 @@ export function Place(x, y, name = "Place") {
 
 export function Transition(x, y, name = "Transition") {
   Node.call(this, x, y, name, nodeTypeEnum.TRANSITION);
+  this.time=1;
   this.width = defaultSetiings.width;
   this.height = defaultSetiings.height;
-  this.products = [];
+  this.products = {};
 }
 
 export function Edge(nodeFrom, nodeTo, x1, y1, x2, y2, name = "Edge") {
@@ -29,13 +30,18 @@ export function Edge(nodeFrom, nodeTo, x1, y1, x2, y2, name = "Edge") {
   this.y1 = y1;
   this.x2 = x2;
   this.y2 = y2;
-  this.products = [];
+  this.products = {};
   this.nodeFrom = nodeFrom;
   this.nodeTo = nodeTo;
   this.name = name;
   this.id = uuidv4();
 }
 
+export function ElementProduct(product, amount) {
+  this.product = product;
+  this.amount = amount;
+  this.id = uuidv4();
+}
 export function Product(name, storagePrice) {
   this.name = name;
   this.storagePrice = storagePrice;

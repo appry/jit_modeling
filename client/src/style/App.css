@@ -159,7 +159,8 @@ table input {
 }
 td:last-child,
 th:last-child {
-  width: 25px;
+  width: 30px;
+  text-align: center;
 }
 
 .inputs-add {
@@ -182,7 +183,8 @@ thead tr {
   background: lightgrey;
   height: 30px;
 }
-td {
+td,
+th {
   border: 1px solid grey;
 }
 tbody tr:nth-child(even) {

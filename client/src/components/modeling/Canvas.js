@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import store from "../../store";
 import buttonsEnum from "../../utils/buttonsEnum";
-import { Place, Transition, Edge, Product } from "../../modelClasses";
+//import { Place, Transition, Edge, Product } from "../../modelClasses";
 import {
   createPlace,
   createTransition,
@@ -65,23 +65,11 @@ class Canvas extends Component {
     const storeState = store.getState();
     switch (storeState.controls.button) {
       case buttonsEnum.PLACE: {
-        // let alignTopLeft = this.alignToGrid({
-        //   x: mousePos.x - defaultSettings.radius,
-        //   y: mousePos.y - defaultSettings.radius
-        // });
-        // alignTopLeft.x += defaultSettings.radius;
-        // alignTopLeft.y += defaultSettings.radius;
         const alignTopLeft = this.alignPlace(mousePos);
         this.props.createPlace(alignTopLeft);
         break;
       }
       case buttonsEnum.TRANSITION: {
-        // let alignTopLeft = this.alignToGrid({
-        //   x: mousePos.x - defaultSettings.width / 2,
-        //   y: mousePos.y - defaultSettings.height / 2
-        // });
-        // alignTopLeft.x += defaultSettings.width / 2;
-        // alignTopLeft.y += defaultSettings.height / 2;
         const alignTopLeft = this.alignTransition(mousePos);
         this.props.createTransition(alignTopLeft);
         break;
@@ -141,14 +129,6 @@ class Canvas extends Component {
         break;
       }
       case canvasActionType.MOVE: {
-        //let x = mousePos.x + this.selected.x - this.startPos.x;
-        //let aligned = this.alignToGrid(mousePos);
-        // let alignTopLeft = this.alignToGrid({
-        //   x: mousePos.x - defaultSettings.width / 2,
-        //   y: mousePos.y - defaultSettings.height / 2
-        // });
-        // alignTopLeft.x += defaultSettings.width / 2;
-        // alignTopLeft.y += defaultSettings.height / 2;
         if (this.selected.nodeType) {
           const newX = this.selected.x + mousePos.x - this.startPos.x;
           const newY = this.selected.y + mousePos.y - this.startPos.y;

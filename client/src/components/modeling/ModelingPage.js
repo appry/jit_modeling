@@ -6,6 +6,8 @@ import ManagerPanel from "./ManagerPanel";
 import Tabs from "./Tabs";
 import ButtonList from "./ButtonList";
 import Toolbox from "./Toolbox";
+import Editing from "./Editing";
+import { connect } from "react-redux";
 
 class ModelingPage extends Component {
   render() {
@@ -34,11 +36,36 @@ class ModelingPage extends Component {
           </div>
           <Tabs />
 
-          <div className="panel-right border">Hi3</div>
+          <div className="panel-right border">
+            {this.props.isElementSelected && <Editing />}
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default ModelingPage;
+const mapStateToProps = state => {
+  let props = {};
+  const projectId = state.projects.selectedProjectId;
+  if (!projectId) {
+    props.isProjectSelected = false;
+    return props;
+  }
+  props.isProjectSelected = true;
+  const model = state.projects.projects[projectId].model;
+  if (!model) {
+    props.isModelPresent = false;
+    return props;
+  }
+  props.isModelPresent = true;
+  const selectedElementId = model.selected;
+  if (!selectedElementId) {
+    props.isElementSelected = false;
+    return props;
+  }
+  props.isElementSelected = true;
+  return props;
+};
+
+export default connect(mapStateToProps, {})(ModelingPage);

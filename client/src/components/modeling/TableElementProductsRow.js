@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import classnames from "classnames";
-import { validateSupply } from "../../validation/model";
+import { validateElementProduct } from "../../validation/model";
 
-export default class TableSuppliesRow extends Component {
+export default class TableElementProductsRow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      supplier: this.props.supply.supplier,
-      product: this.props.supply.product,
-      price: this.props.supply.price,
-      time: this.props.supply.time,
-      max: this.props.supply.max,
-      id: this.props.supply.id,
+      product: this.props.elementProduct.product,
+      amount: this.props.elementProduct.amount,
+      id: this.props.elementProduct.id,
       errors: {}
     };
     this.handleDelete = this.handleDelete.bind(this);
@@ -32,7 +29,7 @@ export default class TableSuppliesRow extends Component {
     this.props.update({ id: this.state.id, [e.target.name]: e.target.value });
   }
   handleUpdate(e) {
-    const validation = validateSupply(this.state);
+    const validation = validateElementProduct(this.state);
     if (validation.isValid) {
       this.setState({ errors: {} });
       this.props.update(this.state);
@@ -43,19 +40,6 @@ export default class TableSuppliesRow extends Component {
   render() {
     return (
       <tr id={this.state.id}>
-        <td
-          className={classnames({
-            "input-is-invalid": this.state.errors.supplier
-          })}
-        >
-          <select
-            name="supplier"
-            value={this.state.supplier}
-            onChange={this.handleSelect}
-          >
-            {this.props.supplierOptions}
-          </select>
-        </td>
         <td
           className={classnames({
             "input-is-invalid": this.state.errors.product
@@ -69,45 +53,21 @@ export default class TableSuppliesRow extends Component {
             {this.props.productOptions}
           </select>
         </td>
+        
         <td
           className={classnames({
-            "input-is-invalid": this.state.errors.price
+            "input-is-invalid": this.state.errors.amount
           })}
         >
           <input
             type="text"
-            name="price"
-            value={this.state.price}
+            name="amount"
+            value={this.state.amount}
             onChange={this.handleChange}
             onBlur={this.handleUpdate}
           />
         </td>
-        <td
-          className={classnames({
-            "input-is-invalid": this.state.errors.time
-          })}
-        >
-          <input
-            type="text"
-            name="time"
-            value={this.state.time}
-            onChange={this.handleChange}
-            onBlur={this.handleUpdate}
-          />
-        </td>
-        <td
-          className={classnames({
-            "input-is-invalid": this.state.errors.max
-          })}
-        >
-          <input
-            type="text"
-            name="max"
-            value={this.state.max}
-            onChange={this.handleChange}
-            onBlur={this.handleUpdate}
-          />
-        </td>
+        
         <td onClick={this.handleDelete}>
           <span className="fas fa-trash-alt" />
         </td>

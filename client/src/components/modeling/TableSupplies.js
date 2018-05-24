@@ -11,22 +11,32 @@ import TableSuppliesRow from "./TableSuppliesRow";
 class TableSupplies extends Component {
   render() {
     console.log("supplies rendered");
-    const supplierOptions = Object.values(this.props.suppliers).map(
-      supplier => {
-        return (
-          <option key={supplier.id} value={supplier.id}>
-            {supplier.name}
-          </option>
-        );
-      }
+    const suppliersValues = Object.values(this.props.suppliers);
+    const productsValues = Object.values(this.props.products);
+    const supplierOptions = suppliersValues.map(supplier => {
+      return (
+        <option key={supplier.id} value={supplier.id}>
+          {supplier.name}
+        </option>
+      );
+    });
+    supplierOptions.unshift(
+      <option disabled key="0" value="">
+        ...
+      </option>
     );
-    const productOptions = Object.values(this.props.products).map(product => {
+    const productOptions = productsValues.map(product => {
       return (
         <option key={product.id} value={product.id}>
           {product.name}
         </option>
       );
     });
+    productOptions.unshift(
+      <option disabled key="0" value="">
+        ...
+      </option>
+    );
     const suppliesList = Object.values(this.props.supplies).map(supply => {
       return (
         <TableSuppliesRow
@@ -54,6 +64,8 @@ class TableSupplies extends Component {
             <AddSupply
               create={this.props.createSupply}
               isActive={this.props.isActive}
+              suppliersValues={suppliersValues}
+              productsValues={productsValues}
               supplierOptions={supplierOptions}
               productOptions={productOptions}
             />

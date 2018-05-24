@@ -37,12 +37,27 @@ export const validateSupply = data => {
   if (!Validator.isNumeric(data.max)) {
     errors.max = "Number is expected";
   }
-  //   if (Validator.isEmpty(data.supplier)) {
-  //     errors.supplier = "Select supplier";
-  //   }
-  //   if (Validator.isEmpty(data.product)) {
-  //     errors.product = "Select product";
-  //   }
+  if (Validator.isEmpty(data.supplier)) {
+    errors.supplier = "Select supplier";
+  }
+  if (Validator.isEmpty(data.product)) {
+    errors.product = "Select product";
+  }
+  return {
+    errors,
+    isValid: isEmpty(errors)
+  };
+};
+
+export const validateElementProduct= data => {
+  let errors = {};
+  if (!Validator.isDecimal(data.amount)) {
+    errors.price = "Number is expected";
+  }
+  
+  if (Validator.isEmpty(data.product)) {
+    errors.product = "Select product";
+  }
   return {
     errors,
     isValid: isEmpty(errors)

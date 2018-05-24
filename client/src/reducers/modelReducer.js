@@ -14,21 +14,14 @@ import {
   TO_BACK,
   CREATE_SUPPLIER,
   DELETE_SUPPLIER,
-  RENAME_SUPPLIER,
   CREATE_PRODUCT,
   DELETE_PRODUCT,
-  RENAME_PRODUCT,
-  CHANGE_STORAGE_PRICE,
   CREATE_SUPPLY,
   DELETE_SUPPLY,
-  CHANGE_SUPPLY_PRODUCT,
-  CHANGE_SUPPLY_SUPPLIER,
-  CHANGE_SUPPLY_PRICE,
-  CHANGE_SUPPLY_TIME,
-  CHANGE_SUPPLY_MAX,
   UPDATE_SUPPLIER,
   UPDATE_PRODUCT,
-  UPDATE_SUPPLY
+  UPDATE_SUPPLY,
+  UPDATE_PROPERTIES
 } from "../actions/types";
 import nodeTypeEnum from "../utils/nodeTypeEnum";
 import {
@@ -314,18 +307,36 @@ export default function(state = initialState, action) {
 
     case UPDATE_SUPPLY: {
       let supply = { ...state.supplies[action.payload.id], ...action.payload };
-      //const data = action.payload;
-      // supply.name = data.name;
-      // supply.product = data.product;
-      // supply.supplier = data.supplier;
-      // supply.max = data.max;
-      // supply.time = data.time;
-      // supply.price = data.price;
 
       return {
         ...state,
         supplies: { ...state.supplies, [supply.id]: supply }
       };
+    }
+
+    case UPDATE_PROPERTIES: {
+      console.log("update");
+      console.log(action.payload);
+      const id = action.payload.id;
+      let element = state.nodes[id];
+      if (element) {
+        return {
+          ...state,
+          nodes: {
+            ...state.nodes,
+            [element.id]: { ...element, ...action.payload }
+          }
+        };
+      } else {
+        element = state.edges[id];
+        return {
+          ...state,
+          edges: {
+            ...state.edges,
+            [element.id]: { ...element, ...action.payload }
+          }
+        };
+      }
     }
 
     default:

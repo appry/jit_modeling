@@ -1,29 +1,20 @@
 import React, { Component } from "react";
 import classnames from "classnames";
-import { validateSupply } from "../../validation/model";
+import { validateElementProduct } from "../../validation/model";
 
 export default class AddSupply extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      supplier: "",
-      product: "",
-      price: "",
-      time: "",
-      max: "",
+      product:"",
+      amount:"",
       errors: {}
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   static getDerivedStateFromProps(nextProps, prevState) {
-    let suppFound = false;
-    for (let supplier of nextProps.suppliersValues) {
-      if (supplier.id === prevState.supplier) {
-        suppFound = true;
-        break;
-      }
-    }
+    
 
     let prodFound = false;
     for (let product of nextProps.productsValues) {
@@ -32,8 +23,8 @@ export default class AddSupply extends Component {
         break;
       }
     }
-    if (!prodFound || !suppFound) {
-      return { product: "", supplier: "" };
+    if (!prodFound) {
+      return { product: "" };
     }
     return null;
   }
@@ -42,7 +33,7 @@ export default class AddSupply extends Component {
   }
 
   handleCreate(e) {
-    const validation = validateSupply(this.state);
+    const validation = validateElementProduct(this.state);
     if (validation.isValid) {
       this.setState({ errors: {} });
       this.props.create(this.state);
@@ -54,19 +45,7 @@ export default class AddSupply extends Component {
   render() {
     return (
       <tr id={this.state.id}>
-        <th
-          className={classnames({
-            "input-is-invalid": this.state.errors.supplier
-          })}
-        >
-          <select
-            name="supplier"
-            value={this.state.supplier}
-            onChange={this.handleChange}
-          >
-            {this.props.supplierOptions}
-          </select>
-        </th>
+        
         <th
           className={classnames({
             "input-is-invalid": this.state.errors.product
@@ -82,40 +61,17 @@ export default class AddSupply extends Component {
         </th>
         <th
           className={classnames({
-            "input-is-invalid": this.state.errors.price
+            "input-is-invalid": this.state.errors.amount
           })}
         >
           <input
             type="text"
-            name="price"
-            value={this.state.price}
+            name="amount"
+            value={this.state.amount}
             onChange={this.handleChange}
           />
         </th>
-        <th
-          className={classnames({
-            "input-is-invalid": this.state.errors.time
-          })}
-        >
-          <input
-            type="text"
-            name="time"
-            value={this.state.time}
-            onChange={this.handleChange}
-          />
-        </th>
-        <th
-          className={classnames({
-            "input-is-invalid": this.state.errors.max
-          })}
-        >
-          <input
-            type="text"
-            name="max"
-            value={this.state.max}
-            onChange={this.handleChange}
-          />
-        </th>
+        
         <th onClick={this.handleCreate}>
           <span className="fas fa-plus-circle" />
         </th>
