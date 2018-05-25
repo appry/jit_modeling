@@ -16,23 +16,29 @@ export default class TableElementProductsRow extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
-
+  componentWillUnmount() {
+    this.handleUpdate();
+  }
   handleChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
   handleDelete(e) {
-    this.props.delete(this.state.id);
+    this.props.delete({ id: this.state.id, elementId: this.props.elementId });
   }
   handleSelect(e) {
     this.setState({ [e.target.name]: e.target.value });
-    this.props.update({ id: this.state.id, [e.target.name]: e.target.value });
+    this.props.update({
+      id: this.state.id,
+      [e.target.name]: e.target.value,
+      elementId: this.props.elementId
+    });
   }
   handleUpdate(e) {
     const validation = validateElementProduct(this.state);
     if (validation.isValid) {
       this.setState({ errors: {} });
-      this.props.update(this.state);
+      this.props.update({ ...this.state, elementId: this.props.elementId });
     } else {
       this.setState({ errors: validation.errors });
     }
@@ -53,7 +59,7 @@ export default class TableElementProductsRow extends Component {
             {this.props.productOptions}
           </select>
         </td>
-        
+
         <td
           className={classnames({
             "input-is-invalid": this.state.errors.amount
@@ -67,7 +73,7 @@ export default class TableElementProductsRow extends Component {
             onBlur={this.handleUpdate}
           />
         </td>
-        
+
         <td onClick={this.handleDelete}>
           <span className="fas fa-trash-alt" />
         </td>

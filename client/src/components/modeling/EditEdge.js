@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropertyGroup from "../common/PropertyGroup";
+import TableElementProducts from "./TableElementProducts";
 
 export default class EditEdge extends Component {
   state = {
@@ -9,6 +10,20 @@ export default class EditEdge extends Component {
   componentWillUnmount() {
     this.onBlur();
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.element.id !== prevProps.element.id) {
+      this.props.updateProperties(prevState);
+    }
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.id !== prevState.id || nextProps.name !== prevState.name) {
+      return {
+        name: nextProps.element.name,
+        id: nextProps.element.id
+      };
+    }
+    return null;
+  }
   onChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
@@ -17,14 +32,25 @@ export default class EditEdge extends Component {
   }
   render() {
     return (
-      <PropertyGroup
-        label="Name"
-        value={this.state.name}
-        name="name"
-        error=""
-        onChange={this.onChange.bind(this)}
-        onBlur={this.onBlur.bind(this)}
-      />
+      <div>
+        <PropertyGroup
+          label="Name"
+          value={this.state.name}
+          name="name"
+          error=""
+          elementId={this.props.element.id}
+          onChange={this.onChange.bind(this)}
+          onBlur={this.onBlur.bind(this)}
+        />
+        <TableElementProducts
+          update={this.props.update}
+          create={this.props.create}
+          delete={this.props.delete}
+          products={this.props.products}
+          elementId={this.props.element.id}
+          elementProducts={this.props.elementProducts}
+        />
+      </div>
     );
   }
 }

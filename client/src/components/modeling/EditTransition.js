@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropertyGroup from "../common/PropertyGroup";
+import TableElementProducts from "./TableElementProducts";
 
 export default class EditPlace extends Component {
   state = {
@@ -54,6 +55,14 @@ export default class EditPlace extends Component {
           error=""
           onChange={this.onChange.bind(this)}
           onBlur={this.onBlur.bind(this)}
+        />
+        <TableElementProducts
+          update={this.props.update}
+          create={this.props.create}
+          delete={this.props.delete}
+          products={this.props.products}
+          elementId={this.props.element.id}
+          elementProducts={this.props.elementProducts}
         />
       </div>
     );

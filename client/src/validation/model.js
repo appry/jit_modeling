@@ -49,12 +49,12 @@ export const validateSupply = data => {
   };
 };
 
-export const validateElementProduct= data => {
+export const validateElementProduct = data => {
   let errors = {};
   if (!Validator.isDecimal(data.amount)) {
-    errors.price = "Number is expected";
+    errors.amount = "Number is expected";
   }
-  
+
   if (Validator.isEmpty(data.product)) {
     errors.product = "Select product";
   }

@@ -21,7 +21,10 @@ import {
   UPDATE_SUPPLIER,
   UPDATE_PRODUCT,
   UPDATE_SUPPLY,
-  UPDATE_PROPERTIES
+  UPDATE_PROPERTIES,
+  CREATE_ELEMENT_PRODUCT,
+  DELETE_ELEMENT_PRODUCT,
+  UPDATE_ELEMENT_PRODUCT
 } from "../actions/types";
 import nodeTypeEnum from "../utils/nodeTypeEnum";
 import {
@@ -30,7 +33,8 @@ import {
   Edge,
   Product,
   Supplier,
-  Supply
+  Supply,
+  ElementProduct
 } from "../modelClasses";
 import { getNormalPos } from "../utils/canvas/helpers";
 import defaultSettings from "../config/defaultSettings";
@@ -249,11 +253,31 @@ export default function(state = initialState, action) {
         state.supplies,
         supply => supply.product !== id
       );
+      let edges = { ...state.edges };
+      for (let key of Object.keys(edges)) {
+        let edge = edges[key];
+        edge.products = Object.filter(
+          edge.products,
+          product => product.product !== id
+        );
+      }
+      let nodes = { ...state.nodes };
+      for (let key of Object.keys(nodes)) {
+        let node = nodes[key];
+        if (node.nodeType === nodeTypeEnum.TRANSITION) {
+          node.products = Object.filter(
+            node.products,
+            product => product.product !== id
+          );
+        }
+      }
+      console.log(edges);
       delete products[id];
       return {
         ...state,
         products,
-        supplies
+        supplies,
+        edges
       };
     }
     //Supplies
@@ -329,11 +353,118 @@ export default function(state = initialState, action) {
         };
       } else {
         element = state.edges[id];
+        if (!element) return state;
         return {
           ...state,
           edges: {
             ...state.edges,
             [element.id]: { ...element, ...action.payload }
+          }
+        };
+      }
+    }
+
+    case CREATE_ELEMENT_PRODUCT: {
+      const elementId = action.payload.elementId;
+      const id = action.payload.id;
+      const newProduct = new ElementProduct(
+        action.payload.product,
+        action.payload.amount
+      );
+      let element = state.nodes[elementId];
+      if (element) {
+        let updated = { ...element };
+        updated.products[newProduct.id] = newProduct;
+        return {
+          ...state,
+          nodes: {
+            ...state.nodes,
+            [updated.id]: updated
+          }
+        };
+      } else {
+        element = state.edges[elementId];
+        if (!element) {
+          return state;
+        }
+        let updated = { ...element };
+        updated.products[newProduct.id] = newProduct;
+        return {
+          ...state,
+          edges: {
+            ...state.edges,
+            [updated.id]: updated
+          }
+        };
+      }
+    }
+
+    case DELETE_ELEMENT_PRODUCT: {
+      const elementId = action.payload.elementId;
+      const id = action.payload.id;
+
+      let element = state.nodes[elementId];
+      if (element) {
+        let updated = { ...element };
+        delete updated.products[id];
+        return {
+          ...state,
+          nodes: {
+            ...state.nodes,
+            [updated.id]: updated
+          }
+        };
+      } else {
+        element = state.edges[elementId];
+
+        if (!element) {
+          return state;
+        }
+        let updated = { ...element };
+        delete updated.products[id];
+        return {
+          ...state,
+          edges: {
+            ...state.edges,
+            [updated.id]: updated
+          }
+        };
+      }
+    }
+
+    case UPDATE_ELEMENT_PRODUCT: {
+      const elementId = action.payload.elementId;
+      const id = action.payload.id;
+
+      let element = state.nodes[elementId];
+      if (element) {
+        if (!element.products[id]) {
+          return state;
+        }
+        let updated = { ...element };
+        updated.products[id].product = action.payload.product;
+        updated.products[id].amount = action.payload.amount;
+        return {
+          ...state,
+          nodes: {
+            ...state.nodes,
+            [updated.id]: updated
+          }
+        };
+      } else {
+        element = state.edges[elementId];
+
+        if (!element || !element.products[id]) {
+          return state;
+        }
+        let updated = { ...element };
+        updated.products[id].product = action.payload.product;
+        updated.products[id].amount = action.payload.amount;
+        return {
+          ...state,
+          edges: {
+            ...state.edges,
+            [updated.id]: updated
           }
         };
       }

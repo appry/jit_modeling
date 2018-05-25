@@ -25,6 +25,7 @@ export default class TableElementProducts extends Component {
         return (
           <TableElementProductsRow
             key={elementProduct.id}
+            elementId={this.props.elementId}
             update={this.props.update}
             delete={this.props.delete}
             elementProduct={elementProduct}
@@ -43,7 +44,8 @@ export default class TableElementProducts extends Component {
               <th />
             </tr>
             <AddElementProduct
-              create={this.props.createSupply}
+              create={this.props.create}
+              elementId={this.props.elementId}
               productsValues={productsValues}
               productOptions={productOptions}
             />

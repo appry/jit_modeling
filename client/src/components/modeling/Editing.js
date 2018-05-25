@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { updateProperties } from "../../actions/modelActions";
+import {
+  updateProperties,
+  updateElementProduct,
+  deleteElementProduct,
+  createElementProduct
+} from "../../actions/modelActions";
 import PropertyGroup from "../common/PropertyGroup";
 import EditPlace from "./EditPlace";
 import EditTransition from "./EditTransition";
@@ -9,13 +14,17 @@ import NodeTypeEnum from "../../utils/nodeTypeEnum";
 
 class Editing extends Component {
   render() {
-    //if (!this.props.isActive) return <div />;
     let editor;
     let element = this.props.selectedElement;
     if (!element.nodeType) {
       editor = (
         <EditEdge
           element={element}
+          update={this.props.updateElementProduct}
+          create={this.props.createElementProduct}
+          delete={this.props.deleteElementProduct}
+          products={this.props.products}
+          elementProducts={this.props.selectedElement.products}
           updateProperties={this.props.updateProperties}
         />
       );
@@ -31,6 +40,11 @@ class Editing extends Component {
         editor = (
           <EditTransition
             element={element}
+            update={this.props.updateElementProduct}
+            create={this.props.createElementProduct}
+            delete={this.props.deleteElementProduct}
+            products={this.props.products}
+            elementProducts={this.props.selectedElement.products}
             updateProperties={this.props.updateProperties}
           />
         );
@@ -42,20 +56,16 @@ class Editing extends Component {
 
 const mapStateToProps = state => {
   const id = state.projects.selectedProjectId;
-  // if (!id) {
-  //   return {
-  //     isActive: false
-  //   };
-  // }
   const model = state.projects.projects[id].model;
-  // if (!model || !model.selected) {
-  //   return {
-  //     isActive: false
-  //   };
-  // }
   return {
-    selectedElement: model.nodes[model.selected] || model.edges[model.selected]
+    selectedElement: model.nodes[model.selected] || model.edges[model.selected],
+    products: model.products
   };
 };
 
-export default connect(mapStateToProps, { updateProperties })(Editing);
+export default connect(mapStateToProps, {
+  updateProperties,
+  updateElementProduct,
+  deleteElementProduct,
+  createElementProduct
+})(Editing);

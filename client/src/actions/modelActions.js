@@ -21,7 +21,10 @@ import {
   UPDATE_SUPPLIER,
   UPDATE_PRODUCT,
   UPDATE_SUPPLY,
-  UPDATE_PROPERTIES
+  UPDATE_PROPERTIES,
+  CREATE_ELEMENT_PRODUCT,
+  DELETE_ELEMENT_PRODUCT,
+  UPDATE_ELEMENT_PRODUCT
 } from "./types";
 
 export const createPlace = pos => {
@@ -188,6 +191,30 @@ export const updateProperties = data => {
   return {
     type: UPDATE_PROPERTIES,
     payload: data,
+    modelChanged: true
+  };
+};
+
+export const createElementProduct = args => {
+  return {
+    type: CREATE_ELEMENT_PRODUCT,
+    payload: args,
+    modelChanged: true
+  };
+};
+
+export const deleteElementProduct = args => {
+  return {
+    type: DELETE_ELEMENT_PRODUCT,
+    payload: args,
+    modelChanged: true
+  };
+};
+
+export const updateElementProduct = args => {
+  return {
+    type: UPDATE_ELEMENT_PRODUCT,
+    payload: args,
     modelChanged: true
   };
 };
