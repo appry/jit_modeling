@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import AddElementProduct from "./AddElementProduct";
 import TableElementProductsRow from "./TableElementProductsRow";

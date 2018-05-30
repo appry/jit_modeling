@@ -3,7 +3,6 @@ import authReducer from "./authReducer";
 import errorReducer from "./errorReducer";
 import projectsReducer from "./projectsReducer";
 import controlsReducer from "./controlsReducer";
-import modelReducer from "./modelReducer";
 import settingsReducer from "./settingsReducer";
 
 export default combineReducers({

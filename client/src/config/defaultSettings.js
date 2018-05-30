@@ -7,11 +7,11 @@ module.exports = {
   strokeStyle: "black",
   selectStrokeStyle: "blue",
   textBaseline: "top",
-  radius: 54,
+  radius: 30,
   edgePointStart: "blue",
   edgePointEnd: "yellow",
   edgePointRadius: 5,
-  width: 41,
-  height: 120,
+  width: 30,
+  height: 60,
   gridNodeSize: 15
 };

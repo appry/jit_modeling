@@ -1,12 +1,8 @@
 import {
   CREATE_PLACE,
   CREATE_TRANSITION,
-  DELETE_NODE,
   MOVE_NODE,
-  RENAME_NODE,
   CREATE_EDGE,
-  DELETE_EDGE,
-  RENAME_EDGE,
   SELECT_ELEMENT,
   DELETE_SELECTED,
   COPY_SELECTED,
@@ -169,6 +165,15 @@ export default function(state = initialState, action) {
       if (selected.nodeType) {
         let copy = { ...selected };
         copy.id = uuidv4();
+        if (copy.nodeType === nodeTypeEnum.TRANSITION) {
+          copy.products = {};
+          for (let key of Object.keys(selected.products)) {
+            let product = selected.products[key];
+            let productCopy = { ...product };
+            productCopy.id = uuidv4();
+            copy.products[productCopy.id] = productCopy;
+          }
+        }
         let pos = getNormalPos({
           x: selected.x + defaultSettings.gridNodeSize,
           y: selected.y + defaultSettings.gridNodeSize
@@ -189,7 +194,6 @@ export default function(state = initialState, action) {
     case TO_BACK: {
       if (!state.selected) return state;
       let id = state.selected;
-      let selected = state.edges[id] || state.nodes[id];
       let elementsOrder = [...state.elementsOrder];
       let index = elementsOrder.indexOf(id);
       elementsOrder.splice(index, 1);
@@ -202,7 +206,6 @@ export default function(state = initialState, action) {
     case TO_FRONT: {
       if (!state.selected) return state;
       let id = state.selected;
-      let selected = state.edges[id] || state.nodes[id];
       let elementsOrder = [...state.elementsOrder];
       let index = elementsOrder.indexOf(id);
       elementsOrder.splice(index, 1);
@@ -366,7 +369,6 @@ export default function(state = initialState, action) {
 
     case CREATE_ELEMENT_PRODUCT: {
       const elementId = action.payload.elementId;
-      const id = action.payload.id;
       const newProduct = new ElementProduct(
         action.payload.product,
         action.payload.amount

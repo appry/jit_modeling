@@ -6,7 +6,6 @@ import {
   deleteElementProduct,
   createElementProduct
 } from "../../actions/modelActions";
-import PropertyGroup from "../common/PropertyGroup";
 import EditPlace from "./EditPlace";
 import EditTransition from "./EditTransition";
 import EditEdge from "./EditEdge";

@@ -146,13 +146,6 @@ tbody tr {
   width: 100%;
 }
 
-/* tbody,
-thead,
-td,
-tr,
-th {
-  border-collapse: collapse;
-} */
 table input {
   border: none;
   width: 100%;
@@ -180,8 +173,14 @@ select {
   border: none;
 }
 thead tr {
-  background: lightgrey;
   height: 30px;
+}
+thead tr:first-child {
+  background: black;
+  color: lightgrey;
+}
+thead tr:last-child {
+  background: #5a5a5a;
 }
 td,
 th {
@@ -191,7 +190,13 @@ tbody tr:nth-child(even) {
   background: lightgrey;
 }
 .input-is-invalid {
-  border: 1px solid red;
+  background: repeating-linear-gradient(
+    -45deg,
+    rgb(201, 204, 20),
+    rgb(201, 204, 20) 5px,
+    white 5px,
+    white 10px
+  );
 }
 table input:focus,
 select:focus {

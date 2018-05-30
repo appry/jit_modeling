@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import store from "../../store";
 import buttonsEnum from "../../utils/buttonsEnum";
-//import { Place, Transition, Edge, Product } from "../../modelClasses";
 import {
   createPlace,
   createTransition,
@@ -104,7 +103,6 @@ class Canvas extends Component {
     ) {
       this.onMouseUp(e);
     }
-    const storeState = store.getState();
     this.endPos = mousePos;
     switch (this.actionType) {
       case canvasActionType.EDGE: {
@@ -160,11 +158,14 @@ class Canvas extends Component {
 
         break;
       }
+      default: {
+        break;
+      }
     }
   }
   onMouseUp(e) {
     if (!this.props.isActive) return;
-    const mousePos = this.getMousePos(e);
+    //const mousePos = this.getMousePos(e);
     switch (this.actionType) {
       case canvasActionType.EDGE: {
         this.update();
@@ -191,6 +192,10 @@ class Canvas extends Component {
         } else {
           this.raiseError("Invalid connection");
         }
+        break;
+      }
+      default: {
+        break;
       }
     }
     this.isMouseDown = false;
@@ -203,10 +208,11 @@ class Canvas extends Component {
     switch (node.nodeType) {
       case nodeTypeEnum.PLACE: {
         return this.alignPlace(pos, node.radius);
-        break;
       }
       case nodeTypeEnum.TRANSITION: {
         return this.alignTransition(pos, node.width, node.height);
+      }
+      default: {
         break;
       }
     }
@@ -348,6 +354,9 @@ class Canvas extends Component {
       case nodeTypeEnum.TRANSITION: {
         return this.checkTransitionClick(x, y, node);
       }
+      default: {
+        break;
+      }
     }
   }
   checkPlaceClick(x, y, p) {
@@ -395,6 +404,9 @@ class Canvas extends Component {
         y1 = nodeTo.y;
         break;
       }
+      default: {
+        break;
+      }
     }
 
     let distX = Math.abs(x2 - x1);
@@ -437,6 +449,9 @@ class Canvas extends Component {
         );
 
         this.drawText(node.name, node.x, node.y + node.height / 2);
+        break;
+      }
+      default: {
         break;
       }
     }
