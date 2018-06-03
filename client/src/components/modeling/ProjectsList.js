@@ -20,7 +20,6 @@ class ProjectsList extends Component {
   }
 
   render() {
-    console.log("ProjectsList rendered");
     if (this.props.loading) return <Spinner />;
     const listedKeys = Object.values(this.props.projects);
     listedKeys.sort(

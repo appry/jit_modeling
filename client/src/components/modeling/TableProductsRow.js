@@ -40,7 +40,6 @@ export default class TableProductsRow extends Component {
     }
   }
   render() {
-    console.log(`Row id=${this.state.id} rendered`);
     return (
       <tr id={this.state.id}>
         <td

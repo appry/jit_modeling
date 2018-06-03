@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";
 import { setCurrentUser } from "./actions/authActions";
@@ -60,6 +65,11 @@ class App extends Component {
             <div className="container">
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route
+                exact
+                path="/"
+                render={props => <Redirect to="/modeling" />}
+              />
               <Switch>
                 <PrivateRoute exact path="/modeling" component={ModelingPage} />
               </Switch>

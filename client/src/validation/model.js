@@ -3,7 +3,7 @@ import isEmpty from "./is-empty";
 
 export const validateProduct = data => {
   let errors = {};
-  if (!Validator.isDecimal(data.storagePrice)) {
+  if (!Validator.isDecimal(data.storagePrice.toString())) {
     errors.storagePrice = "Number is expected";
   }
   if (!Validator.isLength(data.name, { min: 1, max: 30 })) {
@@ -28,13 +28,13 @@ export const validateSupplier = data => {
 
 export const validateSupply = data => {
   let errors = {};
-  if (!Validator.isDecimal(data.price)) {
+  if (!Validator.isDecimal(data.price.toString())) {
     errors.price = "Number is expected";
   }
-  if (!Validator.isDecimal(data.time)) {
+  if (!Validator.isDecimal(data.time.toString())) {
     errors.time = "Number is expected";
   }
-  if (!Validator.isNumeric(data.max)) {
+  if (!Validator.isNumeric(data.max.toString())) {
     errors.max = "Number is expected";
   }
   if (Validator.isEmpty(data.supplier)) {
@@ -51,7 +51,7 @@ export const validateSupply = data => {
 
 export const validateElementProduct = data => {
   let errors = {};
-  if (!Validator.isDecimal(data.amount)) {
+  if (!Validator.isDecimal(data.amount.toString())) {
     errors.amount = "Number is expected";
   }
 

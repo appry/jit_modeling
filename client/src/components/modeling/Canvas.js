@@ -572,7 +572,6 @@ class Canvas extends Component {
     ctx.stroke();
   }
   render() {
-    console.log("Canvas rendered");
     return (
       <div id="tab-prod" className="tab">
         <div id="canvas-container">

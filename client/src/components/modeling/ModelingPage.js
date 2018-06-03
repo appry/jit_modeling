@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 
 class ModelingPage extends Component {
   render() {
-    console.log("ModelingPage rendered");
     return (
       <div className="container">
         <div className="panel-top border">

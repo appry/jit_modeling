@@ -3,6 +3,7 @@ import Canvas from "./Canvas";
 import TableSuppliers from "./TableSuppliers";
 import TableProducts from "./TableProducts";
 import TableSupplies from "./TableSupplies";
+import OptimisationTab from "../optimisation/OptimisationTab";
 import openTab from "../../utils/openTab";
 
 export default class Tabs extends Component {
@@ -50,7 +51,9 @@ export default class Tabs extends Component {
             </div>
           </div>
         </div>
-        <div id="tab-opt" className="tab" style={{ display: "none" }} />
+        <div id="tab-opt" className="tab" style={{ display: "none" }}>
+          <OptimisationTab />
+        </div>
       </div>
     );
   }

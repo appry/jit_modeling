@@ -34,7 +34,7 @@ export default class AddSupply extends Component {
     const validation = validateElementProduct(this.state);
     if (validation.isValid) {
       this.setState({ errors: {} });
-      console.log({ ...this.state, elementId: this.props.elementId });
+
       this.props.create({ ...this.state, elementId: this.props.elementId });
     } else {
       this.setState({ errors: validation.errors });

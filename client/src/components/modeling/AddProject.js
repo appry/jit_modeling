@@ -23,7 +23,6 @@ class AddProject extends Component {
   }
 
   render() {
-    console.log("ManageProjects rendered");
     return (
       <div className="input-group">
         <input

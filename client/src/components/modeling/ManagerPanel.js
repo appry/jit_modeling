@@ -46,7 +46,6 @@ class ManagerPanel extends Component {
   }
 
   render() {
-    console.log("Manager Panel rendered");
     return (
       <div>
         <input

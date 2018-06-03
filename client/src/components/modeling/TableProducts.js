@@ -10,7 +10,6 @@ import TableProductsRow from "./TableProductsRow";
 
 class TableProducts extends Component {
   render() {
-    console.log("products rendered");
     const productsList = Object.values(this.props.products).map(product => {
       return (
         <TableProductsRow
@@ -23,7 +22,7 @@ class TableProducts extends Component {
     });
     return (
       <div>
-        <table>
+        <table className="production-table">
           <thead>
             <tr>
               <th>Name</th>

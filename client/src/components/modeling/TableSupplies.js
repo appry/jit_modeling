@@ -10,7 +10,6 @@ import TableSuppliesRow from "./TableSuppliesRow";
 
 class TableSupplies extends Component {
   render() {
-    console.log("supplies rendered");
     const suppliersValues = Object.values(this.props.suppliers);
     const productsValues = Object.values(this.props.products);
     const supplierOptions = suppliersValues.map(supplier => {
@@ -51,7 +50,7 @@ class TableSupplies extends Component {
     });
     return (
       <div>
-        <table>
+        <table className="production-table">
           <thead>
             <tr>
               <th>Supplier</th>

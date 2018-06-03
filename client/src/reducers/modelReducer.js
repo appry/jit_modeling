@@ -241,7 +241,7 @@ export default function(state = initialState, action) {
     case CREATE_PRODUCT: {
       const newProduct = new Product(
         action.payload.name,
-        action.payload.storagePrice
+        parseFloat(action.payload.storagePrice)
       );
       return {
         ...state,
@@ -299,9 +299,9 @@ export default function(state = initialState, action) {
       const newSupply = new Supply(
         args.product,
         args.supplier,
-        args.max,
-        args.time,
-        args.price
+        parseFloat(args.max),
+        parseFloat(args.time),
+        parseFloat(args.price)
       );
       return {
         ...state,
@@ -325,7 +325,7 @@ export default function(state = initialState, action) {
       let product = { ...state.products[action.payload.id] };
       const data = action.payload;
       product.name = data.name;
-      product.storagePrice = data.storagePrice;
+      product.storagePrice = parseFloat(data.storagePrice);
       return {
         ...state,
         products: { ...state.products, [product.id]: product }
@@ -333,8 +333,13 @@ export default function(state = initialState, action) {
     }
 
     case UPDATE_SUPPLY: {
-      let supply = { ...state.supplies[action.payload.id], ...action.payload };
-
+      let supply = { ...state.supplies[action.payload.id] };
+      const data = action.payload;
+      supply.price = parseFloat(data.price);
+      supply.product = data.product;
+      supply.supplier = data.supplier;
+      supply.time = parseFloat(data.time);
+      supply.max = parseFloat(data.max);
       return {
         ...state,
         supplies: { ...state.supplies, [supply.id]: supply }
@@ -342,16 +347,19 @@ export default function(state = initialState, action) {
     }
 
     case UPDATE_PROPERTIES: {
-      console.log("update");
-      console.log(action.payload);
       const id = action.payload.id;
       let element = state.nodes[id];
+      let updatedElement = { ...element };
+      updatedElement.name = action.payload.name;
+      if (action.payload.time) {
+        updatedElement.time = parseFloat(action.payload.time);
+      }
       if (element) {
         return {
           ...state,
           nodes: {
             ...state.nodes,
-            [element.id]: { ...element, ...action.payload }
+            [element.id]: updatedElement
           }
         };
       } else {
@@ -371,7 +379,7 @@ export default function(state = initialState, action) {
       const elementId = action.payload.elementId;
       const newProduct = new ElementProduct(
         action.payload.product,
-        action.payload.amount
+        parseFloat(action.payload.amount)
       );
       let element = state.nodes[elementId];
       if (element) {
@@ -445,7 +453,7 @@ export default function(state = initialState, action) {
         }
         let updated = { ...element };
         updated.products[id].product = action.payload.product;
-        updated.products[id].amount = action.payload.amount;
+        updated.products[id].amount = parseFloat(action.payload.amount);
         return {
           ...state,
           nodes: {
@@ -461,7 +469,7 @@ export default function(state = initialState, action) {
         }
         let updated = { ...element };
         updated.products[id].product = action.payload.product;
-        updated.products[id].amount = action.payload.amount;
+        updated.products[id].amount = parseFloat(action.payload.amount);
         return {
           ...state,
           edges: {

@@ -5,7 +5,6 @@ import TableElementProductsRow from "./TableElementProductsRow";
 
 export default class TableElementProducts extends Component {
   render() {
-    console.log("node product rendered");
     const productsValues = Object.values(this.props.products);
     const productOptions = productsValues.map(product => {
       return (
@@ -35,7 +34,7 @@ export default class TableElementProducts extends Component {
     );
     return (
       <div>
-        <table>
+        <table className="production-table">
           <thead>
             <tr>
               <th>Product</th>
