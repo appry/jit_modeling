@@ -9,7 +9,7 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case OPTIMISE: {
       let { model, count } = applySimplex(action.payload);
-      let l = genetic(model, count, 10, 5);
+      let l = genetic(model, count, 10, 10);
       return { model, l };
     }
     default:

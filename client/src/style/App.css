@@ -17,8 +17,9 @@
 }
 .panel-right {
   display: flex;
-  min-width: 150px;
-  max-width: 200px;
+  min-width: 200px;
+  max-width: 300px;
+  overflow-y: scroll;
   flex: 2;
 }
 .panel-center {
@@ -177,6 +178,7 @@ thead tr {
 }
 thead tr:first-child {
   background: black;
+  height: 40px;
   color: lightgrey;
 }
 thead tr:last-child {

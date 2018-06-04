@@ -19,9 +19,12 @@ export function Place(x, y, name = "Place") {
 
 export function Transition(x, y, name = "Transition") {
   Node.call(this, x, y, name, nodeTypeEnum.TRANSITION);
-  this.time=1;
+  this.time = 1;
   this.width = defaultSetiings.width;
   this.height = defaultSetiings.height;
+  this.isFinal = false;
+  this.fee = 1;
+  this.storagePrice = 1;
   this.products = {};
 }
 

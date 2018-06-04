@@ -13,5 +13,5 @@ module.exports = {
   edgePointRadius: 5,
   width: 30,
   height: 60,
-  gridNodeSize: 15
+  gridNodeSize: 12
 };

@@ -3,6 +3,7 @@ function ran(min, max) {
 }
 
 export function objective(model) {
+  //console.log("objective called");
   let qr = [],
     qt = [],
     v = [];
@@ -18,8 +19,8 @@ export function objective(model) {
       for (let keyT of place.inputs) {
         let tID = model.edges[keyT].nodeFrom;
         let t = model.nodes[tID];
-        if (t.tau > max) {
-          max = t.tau;
+        if (t.tau + t.time > max) {
+          max = t.tau + t.time;
         }
       }
       place.tau = max;
@@ -62,19 +63,16 @@ export function objective(model) {
       fz += temp * pa.amount * p.storagePrice;
     }
   }
-  const fee = 100;
-  const storagePrice = 10;
-  const amount = 5;
   for (let t of model.transitionsArr) {
-    if (t.outputs.length === 0) {
+    if (t.isFinal) {
       if (t.tau > 0) {
-        fz += fee * t.tau;
+        fz += t.fee * (t.tau + t.time);
       } else {
-        fz += storagePrice * Math.abs(t.tau);
+        fz += t.storagePrice * (Math.abs(t.tau) + t.time);
       }
     }
   }
-  return fz;
+  return Math.round(fz * 1e2) / 1e2;
 }
 
 // ------------------------------------
@@ -105,26 +103,39 @@ function objectiveAverage(model, l, samplesCount) {
   for (let sample of samples) {
     avg += sample;
   }
-  return avg / samples.length;
+  return Math.round(avg / samples.length * 1e2) / 1e2;
 }
 
 export function genetic(model, len, size, parentsToMate) {
+  let startTime = new Date();
   let chromosomes = [];
   for (let i = 0; i < size; i++) {
     chromosomes.push(randomArray(len));
   }
   let maxIts = 100;
   let its = 0;
-  let samples = 100;
+  let samples = 500;
   if (parentsToMate > size) {
     parentsToMate = size;
   }
+  let chromosomeHashes = {};
   while (its < maxIts) {
-    chromosomes.sort(
-      (a, b) =>
-        objectiveAverage(model, a, samples) -
-        objectiveAverage(model, b, samples)
-    );
+    chromosomes.sort((a, b) => {
+      let aVal, bVal;
+      if (chromosomeHashes[a]) {
+        aVal = chromosomeHashes[a];
+      } else {
+        aVal = objectiveAverage(model, a, samples);
+        chromosomeHashes[a] = aVal;
+      }
+      if (chromosomeHashes[b]) {
+        bVal = chromosomeHashes[b];
+      } else {
+        bVal = objectiveAverage(model, b, samples);
+        chromosomeHashes[b] = bVal;
+      }
+      return aVal - bVal;
+    });
     let children = [];
     for (let i = 0; i < parentsToMate - 1; i++) {
       for (let j = i + 1; j < parentsToMate; j++) {
@@ -134,31 +145,42 @@ export function genetic(model, len, size, parentsToMate) {
       }
     }
     chromosomes = chromosomes.concat(children);
-    chromosomes.sort(
-      (a, b) =>
-        objectiveAverage(model, a, samples) -
-        objectiveAverage(model, b, samples)
-    );
+    chromosomes.sort((a, b) => {
+      let aVal, bVal;
+      if (chromosomeHashes[a]) {
+        aVal = chromosomeHashes[a];
+      } else {
+        aVal = objectiveAverage(model, a, samples);
+        chromosomeHashes[a] = aVal;
+      }
+      if (chromosomeHashes[b]) {
+        bVal = chromosomeHashes[b];
+      } else {
+        bVal = objectiveAverage(model, b, samples);
+        chromosomeHashes[b] = bVal;
+      }
+      return aVal - bVal;
+    });
     chromosomes = chromosomes.slice(0, size);
     its++;
-    // console.log(
-    //   chromosomes[0],
-    //   objectiveAverage(model, chromosomes[0], samples)
-    // );
+    let endTime = new Date();
+    let timeDiff = endTime - startTime;
+    timeDiff /= 1000;
+    if (timeDiff > 10) break;
   }
-  console.log(chromosomes[0], objectiveAverage(model, chromosomes[0], samples));
-  console.log([0, 0], objectiveAverage(model, [0, 0], samples));
+  console.log(objectiveAverage(model, chromosomes[0], samples));
   return chromosomes[0];
 }
 
+//промежуточная рекомбинация
 function createChildren(parent1, parent2) {
-  const mutationProb = 0.4;
+  const mutationProb = 0.1;
   let child1, child2;
   child1 = parent1.map(
-    (el, index) => el + ran(-0.25, 1.25) * (parent2[index] - el) * ran(1, 10)
+    (el, index) => el + ran(-0.25, 1.25) * (parent2[index] - el) * ran(1, 5)
   );
   child2 = parent2.map(
-    (el, index) => el + ran(-0.25, 1.25) * (parent1[index] - el) * ran(1, 10)
+    (el, index) => el + ran(-0.25, 1.25) * (parent1[index] - el) * ran(1, 5)
   );
   let mut = ran(0, 1);
   if (mut < mutationProb) mutate(child1);
@@ -167,6 +189,7 @@ function createChildren(parent1, parent2) {
   return [child1, child2];
 }
 
+// Отбор усечением
 function mutate(chrom) {
   let index = Math.floor(ran(0, chrom.length));
   let min = Number.MAX_VALUE,
@@ -190,7 +213,7 @@ function arraysEqual(a, b) {
 function randomArray(n) {
   let arr = [];
   for (let i = 0; i < n; i++) {
-    arr.push(ran(-1, 1));
+    arr.push(ran(-0.1, 0.1));
   }
   return arr;
 }

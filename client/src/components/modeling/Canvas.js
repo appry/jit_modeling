@@ -180,14 +180,18 @@ class Canvas extends Component {
           ) {
             this.raiseError("Edge already exists");
           } else {
-            this.props.createEdge({
-              nodeFrom: nodeFrom.id,
-              nodeTo: nodeTo.id,
-              x1: this.startPos.x,
-              y1: this.startPos.y,
-              x2: this.endPos.x,
-              y2: this.endPos.y
-            });
+            if (nodeFrom.isFinal) {
+              this.raiseError("Transition is marked as Final");
+            } else {
+              this.props.createEdge({
+                nodeFrom: nodeFrom.id,
+                nodeTo: nodeTo.id,
+                x1: this.startPos.x,
+                y1: this.startPos.y,
+                x2: this.endPos.x,
+                y2: this.endPos.y
+              });
+            }
           }
         } else {
           this.raiseError("Invalid connection");
@@ -447,7 +451,17 @@ class Canvas extends Component {
             ? defaultSettings.selectStrokeStyle
             : defaultSettings.strokeStyle
         );
-
+        if (node.isFinal) {
+          this.drawRect(
+            node.x,
+            node.y,
+            node.width - 8,
+            node.height - 8,
+            this.selected === node
+              ? defaultSettings.selectStrokeStyle
+              : defaultSettings.strokeStyle
+          );
+        }
         this.drawText(node.name, node.x, node.y + node.height / 2);
         break;
       }
@@ -561,11 +575,35 @@ class Canvas extends Component {
   drawGrid(canvas, ctx, gridNodeSize) {
     ctx.strokeStyle = "#E8E8E8";
     ctx.lineWidth = 1;
+    ctx.beginPath();
     for (let i = 0; i < canvas.height; i = i + gridNodeSize) {
+      if (i % (5 * gridNodeSize) === 0) {
+        ctx.stroke();
+        ctx.strokeStyle = "#B8B8B8";
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+        ctx.strokeStyle = "#E8E8E8";
+        ctx.beginPath();
+        continue;
+      }
       ctx.moveTo(0, i);
       ctx.lineTo(canvas.width, i);
     }
+
     for (let i = 0; i < canvas.width; i = i + gridNodeSize) {
+      if (i % (5 * gridNodeSize) === 0) {
+        ctx.stroke();
+        ctx.strokeStyle = "#B8B8B8";
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+        ctx.strokeStyle = "#E8E8E8";
+        ctx.beginPath();
+        continue;
+      }
       ctx.moveTo(i, 0);
       ctx.lineTo(i, canvas.height);
     }

@@ -353,6 +353,9 @@ export default function(state = initialState, action) {
       updatedElement.name = action.payload.name;
       if (action.payload.time) {
         updatedElement.time = parseFloat(action.payload.time);
+        updatedElement.fee = parseFloat(action.payload.fee);
+        updatedElement.storagePrice = parseFloat(action.payload.storagePrice);
+        updatedElement.isFinal = action.payload.isFinal;
       }
       if (element) {
         return {
