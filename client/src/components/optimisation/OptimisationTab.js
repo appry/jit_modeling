@@ -37,7 +37,11 @@ class Optimisation extends Component {
   render() {
     return (
       <div>
-        <button className="btn" onClick={this.handleClick}>
+        <button
+          className="btn btn-success"
+          style={{ margin: "5px" }}
+          onClick={this.handleClick}
+        >
           Optimise
         </button>
         <OptimisationTable optimisation={this.props.optimisation} />
