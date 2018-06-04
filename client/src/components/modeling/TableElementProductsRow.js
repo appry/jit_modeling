@@ -31,7 +31,8 @@ export default class TableElementProductsRow extends Component {
     this.props.update({
       id: this.state.id,
       [e.target.name]: e.target.value,
-      elementId: this.props.elementId
+      elementId: this.props.elementId,
+      amount: this.state.amount
     });
   }
   handleUpdate(e) {

@@ -2,20 +2,19 @@ function ran(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function objective(model, l) {
+export function objective(model) {
   let qr = [],
     qt = [],
     v = [];
   //начальные значения qt
 
   for (let t of model.transitionsArr) {
-    t.tau += t.time;
     qt.push(t.tau);
   }
   let it = 0;
   while (true) {
     for (let place of model.placesArr) {
-      let max = 0;
+      let max = -Number.MAX_VALUE;
       for (let keyT of place.inputs) {
         let tID = model.edges[keyT].nodeFrom;
         let t = model.nodes[tID];
@@ -27,7 +26,7 @@ function objective(model, l) {
       v.push(place.tau);
     }
     for (let t of model.transitionsArr) {
-      let max = 0;
+      let max = -Number.MAX_VALUE;
       for (let keyP of t.inputs) {
         let placeID = model.edges[keyP].nodeFrom;
         let place = model.nodes[placeID];
@@ -42,14 +41,15 @@ function objective(model, l) {
     qt = qr.slice();
     qr = [];
     v = [];
-  }
+  } // qr qt ----------------------
+
   let fz = 0;
   let count = 0;
   for (let t of model.transitionsArr) {
     for (let pa of t.productsArr) {
       let p = model.products[pa.product];
       for (let opt of pa.opt) {
-        fz += (t.tau + l[count++]) * opt.amount * p.storagePrice; //??????
+        fz += (t.tau - opt.tau) * opt.amount * p.storagePrice; //??????
       }
     }
   }
@@ -59,14 +59,20 @@ function objective(model, l) {
     for (let pa of edge.productsArr) {
       let p = model.products[pa.product];
       let temp = nodeTo.tau - nodeFrom.tau;
-      if (temp < 0) temp = 0;
       fz += temp * pa.amount * p.storagePrice;
     }
   }
   const fee = 100;
+  const storagePrice = 10;
   const amount = 5;
   for (let t of model.transitionsArr) {
-    if (t.outputs.length === 0) fz += fee * t.tau;
+    if (t.outputs.length === 0) {
+      if (t.tau > 0) {
+        fz += fee * t.tau;
+      } else {
+        fz += storagePrice * Math.abs(t.tau);
+      }
+    }
   }
   return fz;
 }
@@ -74,9 +80,9 @@ function objective(model, l) {
 // ------------------------------------
 // ------------------------------------
 // ------------------------------------
+// tau
 function func(y, lambda, l) {
-  let res = -Math.log(y) / lambda - l;
-  return res < 0 ? 0 : res;
+  return -Math.log(y) / lambda - l;
 }
 
 function objectiveAverage(model, l, samplesCount) {
@@ -93,7 +99,7 @@ function objectiveAverage(model, l, samplesCount) {
       }
       transition.tau = maxTau;
     }
-    samples.push(objective(model, l));
+    samples.push(objective(model));
   }
   let avg = 0;
   for (let sample of samples) {
@@ -135,11 +141,13 @@ export function genetic(model, len, size, parentsToMate) {
     );
     chromosomes = chromosomes.slice(0, size);
     its++;
+    // console.log(
+    //   chromosomes[0],
+    //   objectiveAverage(model, chromosomes[0], samples)
+    // );
   }
-  console.log(objectiveAverage(model, chromosomes[0], samples));
-  console.log(objectiveAverage(model, [0, 0, -1000], samples));
-
-  //  console.log(chromosomes);
+  console.log(chromosomes[0], objectiveAverage(model, chromosomes[0], samples));
+  console.log([0, 0], objectiveAverage(model, [0, 0], samples));
   return chromosomes[0];
 }
 
@@ -182,7 +190,7 @@ function arraysEqual(a, b) {
 function randomArray(n) {
   let arr = [];
   for (let i = 0; i < n; i++) {
-    arr.push(ran(0, 100));
+    arr.push(ran(-1, 1));
   }
   return arr;
 }
